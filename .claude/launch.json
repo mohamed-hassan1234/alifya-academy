@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "alifya-api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "-w", "@alifya/api"],
+      "port": 4100
+    },
+    {
+      "name": "alifya-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "-w", "@alifya/web"],
+      "env": { "WEB_PORT": "5180", "API_PORT": "4100" },
+      "port": 5180
+    }
+  ]
+}

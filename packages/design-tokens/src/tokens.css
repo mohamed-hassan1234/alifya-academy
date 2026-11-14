@@ -1,0 +1,18 @@
+/* Alifya Academy design tokens. RGB channels so Tailwind can apply opacity modifiers. */
+:root {
+  --alf-primary: 23 51 44; /* #17332C */
+  --alf-primary-hover: 31 68 58;
+  --alf-accent: 220 164 119; /* #DCA477 */
+  --alf-accent-strong: 168 108 62; /* darker peach for text on light surfaces (AA contrast) */
+  --alf-background: 255 255 255; /* #FFFFFF */
+  --alf-ivory: 250 248 245; /* #FAF8F5 */
+  --alf-mint: 238 243 240; /* #EEF3F0 */
+  --alf-text: 32 43 39; /* #202B27 */
+  --alf-muted: 104 117 111; /* #68756F */
+  --alf-border: 229 234 230; /* #E5EAE6 */
+  --alf-danger: 176 42 42;
+  --alf-success: 30 110 72;
+  --alf-warning: 150 98 10;
+  --alf-info: 34 86 140;
+  --alf-radius: 0.5rem;
+}

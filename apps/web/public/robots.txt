@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /student/
+Disallow: /instructor/
+Disallow: /admin/
+Disallow: /admissions/
+Disallow: /finance/
+Disallow: /api/
