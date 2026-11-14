@@ -24,6 +24,9 @@ const envSchema = z
     SMTP_PASS: z.string().optional(),
     SMTP_SECURE: bool.optional(),
     LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
+    /** Root folder for uploaded files (local storage driver). */
+    STORAGE_DIR: z.string().default('./storage'),
+    STORAGE_DRIVER: z.enum(['local']).default('local'),
     SEED_SUPERADMIN_EMAIL: z.string().email().optional(),
     SEED_SUPERADMIN_PASSWORD: z.string().optional(),
     SEED_SUPERADMIN_NAME: z.string().default('Super Administrator'),

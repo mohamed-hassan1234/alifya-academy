@@ -15,7 +15,9 @@ import { UserSession } from './session.model.js';
 import { signAccessToken } from './tokens.js';
 import * as emails from './auth.emails.js';
 
-const BCRYPT_COST = 12;
+/** Production cost. Tests use the minimum so the suite stays fast and deterministic under load. */
+export const PRODUCTION_BCRYPT_COST = 12;
+export const BCRYPT_COST = env.NODE_ENV === 'test' ? 4 : PRODUCTION_BCRYPT_COST;
 const MAX_FAILED_LOGINS = 8;
 const LOCK_MINUTES = 15;
 const VERIFY_TTL_MS = 24 * 3600_000;

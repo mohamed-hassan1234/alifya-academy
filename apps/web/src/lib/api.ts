@@ -1,6 +1,6 @@
 import type { AxiosError } from 'axios';
 import axios, { type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios';
-import type { ApiErrorBody, ApiSuccess, AuthSession, PaginationMeta } from '@alifya/shared';
+import type { ApiErrorBody, ApiSuccess, AuthSession, MediaAssetDto, PaginationMeta } from '@alifya/shared';
 
 /**
  * Access tokens live ONLY in memory (never localStorage). The refresh token is an HttpOnly cookie the
@@ -131,4 +131,27 @@ export function normalizeError(err: unknown): NormalizedError {
       };
   }
   return { status: 500, code: 'UNKNOWN', message: 'Something went wrong. Please try again.', fields: {} };
+}
+
+/** Multipart upload with progress reporting. Validation is repeated (authoritatively) on the server. */
+export async function apiUpload(
+  file: File,
+  purpose: string,
+  onProgress?: (pct: number) => void,
+): Promise<MediaAssetDto> {
+  const form = new FormData();
+  form.append('purpose', purpose);
+  form.append('file', file);
+  const res = await http.post<ApiSuccess<MediaAssetDto>>('/media', form, {
+    timeout: 10 * 60_000,
+    onUploadProgress: (e) => {
+      if (onProgress && e.total) onProgress(Math.round((e.loaded / e.total) * 100));
+    },
+  });
+  return res.data.data;
+}
+
+/** Short-lived link for a private file (video/PDF/resource), usable in <video src> or downloads. */
+export async function apiMediaLink(mediaId: string): Promise<string> {
+  return (await apiGet<{ url: string; expiresAt: string | null }>(`/media/${mediaId}/link`)).url;
 }

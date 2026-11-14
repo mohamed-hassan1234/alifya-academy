@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars,
+  faChalkboardUser,
+  faEnvelope,
+  faIdBadge,
+  faLayerGroup,
   faBookOpen,
   faClipboardList,
   faGaugeHigh,
@@ -29,6 +33,8 @@ interface NavItem {
   icon: IconDefinition;
   /** Shown when the user holds ANY of these. Omitted = every signed-in user. */
   any?: Permission[];
+  /** Shown when the user holds this role (ownership-scoped portals such as teaching). */
+  role?: string;
 }
 interface NavGroup {
   titleKey: string;
@@ -45,10 +51,34 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    titleKey: 'nav.instructorPortal',
+    items: [
+      {
+        to: '/instructor/dashboard',
+        labelKey: 'nav.instructorPortal',
+        icon: faChalkboardUser,
+        role: 'instructor',
+      },
+      { to: '/instructor/profile', labelKey: 'nav.teachingProfile', icon: faIdBadge, role: 'instructor' },
+    ],
+  },
+  {
     titleKey: 'admin.area',
     items: [
       { to: '/admin/courses', labelKey: 'admin.courses', icon: faBookOpen, any: ['courses.read'] },
-      { to: '/admin/categories', labelKey: 'admin.categories', icon: faTags, any: ['courses.update'] },
+      {
+        to: '/admin/categories',
+        labelKey: 'admin.categories',
+        icon: faTags,
+        any: ['categories.manage', 'courses.update'],
+      },
+      { to: '/admin/programs', labelKey: 'nav.programs', icon: faLayerGroup, any: ['programs.manage'] },
+      {
+        to: '/admin/instructors',
+        labelKey: 'nav.instructors',
+        icon: faChalkboardUser,
+        any: ['instructors.read', 'instructors.manage', 'users.read'],
+      },
       { to: '/admin/users', labelKey: 'admin.users', icon: faUsers, any: ['users.read'] },
       { to: '/admin/roles', labelKey: 'admin.roles', icon: faShieldHalved, any: ['permissions.manage'] },
       {
@@ -56,6 +86,12 @@ const NAV_GROUPS: NavGroup[] = [
         labelKey: 'admin.auditLogs',
         icon: faClipboardList,
         any: ['audit_logs.read'],
+      },
+      {
+        to: '/admin/contact-messages',
+        labelKey: 'nav.contact',
+        icon: faEnvelope,
+        any: ['cms.manage', 'settings.manage'],
       },
       { to: '/admin/settings', labelKey: 'admin.settings', icon: faGear, any: ['settings.manage'] },
     ],
@@ -65,9 +101,10 @@ const NAV_GROUPS: NavGroup[] = [
 export function useVisibleNav(): NavGroup[] {
   const { user } = useAuth();
   const held = new Set(user?.permissions ?? []);
+  const roles = new Set(user?.roles.map((r) => r.key) ?? []);
   return NAV_GROUPS.map((g) => ({
     ...g,
-    items: g.items.filter((i) => !i.any || i.any.some((p) => held.has(p))),
+    items: g.items.filter((i) => (i.role ? roles.has(i.role) : !i.any || i.any.some((p) => held.has(p)))),
   })).filter((g) => g.items.length);
 }
 

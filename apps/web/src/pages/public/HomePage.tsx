@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/feedback';
 import { useAuth, dashboardPathFor } from '@/features/auth/AuthProvider';
 import { CourseCard } from '@/features/courses/CourseCard';
-import { FALLBACK_SETTINGS, useCourses, useSiteSettings } from '@/lib/queries';
+import { FALLBACK_SETTINGS, useCourses, useInstructors, usePrograms, useSiteSettings } from '@/lib/queries';
+import { InstructorCard, ProgramCard } from '@/features/public/cards';
 import { usePageMeta } from '@/lib/seo';
 
 export function CourseGridSkeleton({ count = 3 }: { count?: number }) {
@@ -33,6 +34,8 @@ export function HomePage() {
   const { data: s = FALLBACK_SETTINGS } = useSiteSettings();
   // Featured first, then most recently published — real records only.
   const featured = useCourses({ limit: 6, sort: 'newest' });
+  const programs = usePrograms({ limit: 4 });
+  const instructors = useInstructors({ limit: 4 });
   usePageMeta({ title: s.academyName, description: s.hero.subtitle ?? t('home.heroSubtitle') });
 
   return (
@@ -108,6 +111,54 @@ export function HomePage() {
           </div>
         )}
       </section>
+
+      {/* Academic programs — rendered only when published programs exist */}
+      {programs.data && programs.data.data.length > 0 && (
+        <section className="bg-ivory">
+          <div className="container py-16 sm:py-24">
+            <SectionHeading
+              eyebrow={t('programs.eyebrow')}
+              title={t('programs.homeTitle')}
+              action={
+                <Link
+                  to="/programs"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                >
+                  {t('programs.seeAll')} <FontAwesomeIcon icon={faArrowRight} aria-hidden />
+                </Link>
+              }
+            />
+            <div className="grid gap-6 lg:grid-cols-2">
+              {programs.data.data.map((p) => (
+                <ProgramCard key={p.id} program={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Instructor highlights — real public profiles only */}
+      {instructors.data && instructors.data.data.length > 0 && (
+        <section className="container py-16 sm:py-24">
+          <SectionHeading
+            eyebrow={t('instructors.eyebrow')}
+            title={t('instructors.homeTitle')}
+            action={
+              <Link
+                to="/instructors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+              >
+                {t('instructors.seeAll')} <FontAwesomeIcon icon={faArrowRight} aria-hidden />
+              </Link>
+            }
+          />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {instructors.data.data.map((i) => (
+              <InstructorCard key={i.id} instructor={i} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       {!user && (

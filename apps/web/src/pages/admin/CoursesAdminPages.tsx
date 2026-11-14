@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,6 +27,7 @@ import {
 } from '@/components/shared';
 import { DataTable, TableSkeleton } from '@/components/shared/DataTable';
 import { useToast } from '@/components/shared/toast';
+import { ImageUploader } from '@/components/shared/Uploaders';
 import { Button } from '@/components/ui/button';
 import { AlertMessage, Badge } from '@/components/ui/feedback';
 import { Checkbox, Input, Label, Select, Textarea } from '@/components/ui/form-controls';
@@ -408,11 +409,16 @@ function CourseForm({ course }: { course?: AdminCourseDto }) {
           title={course ? course.title : t('admin.newCourse')}
           actions={
             course && (
-              <StatusBadge
-                status={
-                  course.publicationStatus === 'published' ? course.displayStatus : course.publicationStatus
-                }
-              />
+              <>
+                <StatusBadge
+                  status={
+                    course.publicationStatus === 'published' ? course.displayStatus : course.publicationStatus
+                  }
+                />
+                <Button variant="secondary" size="sm" asChild>
+                  <Link to={`/admin/courses/${course.id}/curriculum`}>Manage curriculum</Link>
+                </Button>
+              </>
             )
           }
         />
@@ -447,13 +453,21 @@ function CourseForm({ course }: { course?: AdminCourseDto }) {
                 ))}
               </Select>
             </FormField>
-            <FormField
-              label="Thumbnail image URL"
-              hint="Upload support arrives with the media module."
-              error={e.thumbnailUrl?.message}
-            >
-              <Input type="url" {...form.register('thumbnailUrl')} placeholder="https://" />
-            </FormField>
+            <div className="md:col-span-2">
+              <Controller
+                control={form.control}
+                name="thumbnailUrl"
+                render={({ field }) => (
+                  <ImageUploader
+                    label="Course image"
+                    purpose="course_thumbnail"
+                    value={field.value || null}
+                    onChange={(url) => field.onChange(url ?? '')}
+                    error={e.thumbnailUrl?.message}
+                  />
+                )}
+              />
+            </div>
           </Section>
 
           <Section title={t('courses.instructor')}>

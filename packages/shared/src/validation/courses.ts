@@ -8,7 +8,13 @@ import {
   SUPPORTED_LANGUAGES,
   WEEKDAYS,
 } from '../enums.js';
-import { objectIdSchema, paginationQuerySchema, slugSchema, timezoneSchema } from './common.js';
+import {
+  assetUrlSchema,
+  objectIdSchema,
+  paginationQuerySchema,
+  slugSchema,
+  timezoneSchema,
+} from './common.js';
 
 const isoDate = z.coerce.date();
 const time = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use HH:MM (24h)');
@@ -27,7 +33,7 @@ const courseBase = z.object({
   slug: slugSchema.optional(),
   subtitle: z.string().trim().max(240).optional().default(''),
   description: z.string().trim().max(20000).optional().default(''),
-  thumbnailUrl: z.string().url().max(2048).nullable().optional(),
+  thumbnailUrl: assetUrlSchema.nullable().optional(),
   categoryId: objectIdSchema.nullable().optional(),
   instructorIds: z.array(objectIdSchema).max(10).optional().default([]),
   /** Fee in minor units (cents). 0 = free. */

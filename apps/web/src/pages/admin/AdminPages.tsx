@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +20,7 @@ import { DashboardPageHeader, useVisibleNav } from '@/components/layout/Dashboar
 import { EmptyState, ErrorState, FormField, Pagination, StatusBadge } from '@/components/shared';
 import { DataTable, TableSkeleton } from '@/components/shared/DataTable';
 import { useToast } from '@/components/shared/toast';
+import { ImageUploader } from '@/components/shared/Uploaders';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/dialog';
 import { AlertMessage, Badge } from '@/components/ui/feedback';
@@ -753,6 +754,12 @@ interface SettingsForm {
   heroSubtitle: string;
   heroImageUrl: string;
   aboutSummary: string;
+  aboutIntroduction: string;
+  aboutMission: string;
+  aboutVision: string;
+  aboutApproach: string;
+  aboutValues: string;
+  aboutObjectives: string;
   facebook: string;
   instagram: string;
   linkedin: string;
@@ -761,6 +768,8 @@ interface SettingsForm {
   tiktok: string;
 }
 const SOCIALS = ['facebook', 'instagram', 'linkedin', 'x', 'youtube', 'tiktok'] as const;
+/** Line separator for one-item-per-line textareas. */
+const NL = '\n';
 
 export function AdminSettingsPage() {
   const { t } = useTranslation();
@@ -791,6 +800,12 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
       heroSubtitle: initial.hero.subtitle ?? '',
       heroImageUrl: initial.hero.imageUrl ?? '',
       aboutSummary: initial.about.summary ?? '',
+      aboutIntroduction: initial.about.introduction ?? '',
+      aboutMission: initial.about.mission ?? '',
+      aboutVision: initial.about.vision ?? '',
+      aboutApproach: initial.about.approach ?? '',
+      aboutValues: initial.about.values.join(NL),
+      aboutObjectives: initial.about.objectives.join(NL),
       ...Object.fromEntries(SOCIALS.map((s) => [s, initial.social[s] ?? ''])),
     } as SettingsForm,
   });
@@ -811,7 +826,21 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
           address: n(v.address),
         },
         hero: { title: n(v.heroTitle), subtitle: n(v.heroSubtitle), imageUrl: n(v.heroImageUrl) },
-        about: { summary: n(v.aboutSummary) },
+        about: {
+          summary: n(v.aboutSummary),
+          introduction: n(v.aboutIntroduction),
+          mission: n(v.aboutMission),
+          vision: n(v.aboutVision),
+          approach: n(v.aboutApproach),
+          values: v.aboutValues
+            .split(NL)
+            .map((x) => x.trim())
+            .filter(Boolean),
+          objectives: v.aboutObjectives
+            .split(NL)
+            .map((x) => x.trim())
+            .filter(Boolean),
+        },
         social: Object.fromEntries(SOCIALS.map((s) => [s, n(v[s])])),
       });
       qc.setQueryData(queryKeys.settings, saved);
@@ -836,9 +865,22 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
           <FormField label="Academy name">
             <Input {...form.register('academyName')} />
           </FormField>
-          <FormField label="Official logo URL" hint="Use only the official supplied asset.">
-            <Input type="url" {...form.register('logoUrl')} />
-          </FormField>
+          <div className="md:row-span-2">
+            <Controller
+              control={form.control}
+              name="logoUrl"
+              render={({ field }) => (
+                <ImageUploader
+                  label="Official logo"
+                  purpose="site_asset"
+                  aspect="3/1"
+                  hint="Upload only the official Alifya Academy logo (PNG or WebP with transparency recommended)."
+                  value={field.value || null}
+                  onChange={(u) => field.onChange(u ?? '')}
+                />
+              )}
+            />
+          </div>
           <FormField label="Tagline" className="md:col-span-2">
             <Input {...form.register('tagline')} />
           </FormField>
@@ -850,11 +892,44 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
           <FormField label="Homepage hero title" hint="Empty = default translated text.">
             <Input {...form.register('heroTitle')} />
           </FormField>
-          <FormField label="Homepage hero image URL">
-            <Input type="url" {...form.register('heroImageUrl')} />
-          </FormField>
+          <div className="md:row-span-2">
+            <Controller
+              control={form.control}
+              name="heroImageUrl"
+              render={({ field }) => (
+                <ImageUploader
+                  label="Homepage hero photograph"
+                  purpose="site_asset"
+                  aspect="4/5"
+                  value={field.value || null}
+                  onChange={(u) => field.onChange(u ?? '')}
+                />
+              )}
+            />
+          </div>
           <FormField label="Homepage hero subtitle" className="md:col-span-2">
             <Textarea rows={2} {...form.register('heroSubtitle')} />
+          </FormField>
+        </section>
+        <section className="grid gap-5 rounded-lg border border-border bg-background p-6 md:grid-cols-2">
+          <h2 className="text-lg md:col-span-2">About page</h2>
+          <FormField label="Introduction" className="md:col-span-2">
+            <Textarea rows={4} {...form.register('aboutIntroduction')} />
+          </FormField>
+          <FormField label="Mission">
+            <Textarea rows={3} {...form.register('aboutMission')} />
+          </FormField>
+          <FormField label="Vision">
+            <Textarea rows={3} {...form.register('aboutVision')} />
+          </FormField>
+          <FormField label="Values (one per line)">
+            <Textarea rows={4} {...form.register('aboutValues')} />
+          </FormField>
+          <FormField label="Educational objectives (one per line)">
+            <Textarea rows={4} {...form.register('aboutObjectives')} />
+          </FormField>
+          <FormField label="Learning approach" className="md:col-span-2">
+            <Textarea rows={3} {...form.register('aboutApproach')} />
           </FormField>
         </section>
         <section className="grid gap-5 rounded-lg border border-border bg-background p-6 md:grid-cols-2">

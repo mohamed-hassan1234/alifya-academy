@@ -15,6 +15,19 @@ import { adminCoursesRouter, publicCoursesRouter } from './modules/courses/cours
 import { adminRolesRouter } from './modules/roles/roles.routes.js';
 import { adminSettingsRouter, publicSettingsRouter } from './modules/settings/settings.js';
 import { adminUsersRouter, meRouter } from './modules/users/users.routes.js';
+import { mediaRouter } from './modules/media/media.routes.js';
+import { adminProgramsRouter, publicProgramsRouter } from './modules/programs/programs.js';
+import {
+  adminInstructorsRouter,
+  instructorProfileRouter,
+  publicInstructorsRouter,
+} from './modules/instructors/instructors.js';
+import {
+  curriculumRouter,
+  instructorCoursesRouter,
+  publicCurriculumRouter,
+} from './modules/curriculum/curriculum.routes.js';
+import { adminContactRouter, publicContactRouter } from './modules/contact/contact.js';
 import { ok } from './utils/respond.js';
 
 export function createApp(): Express {
@@ -63,6 +76,17 @@ export function createApp(): Express {
   v1.use('/admin', adminCoursesRouter);
   v1.use('/admin/audit-logs', adminAuditRouter);
   v1.use('/admin/settings', adminSettingsRouter);
+  v1.use('/media', mediaRouter);
+  v1.use('/', publicProgramsRouter);
+  v1.use('/', publicInstructorsRouter);
+  v1.use('/', publicCurriculumRouter);
+  v1.use('/', publicContactRouter);
+  v1.use('/admin/programs', adminProgramsRouter);
+  v1.use('/admin/instructors', adminInstructorsRouter);
+  v1.use('/admin/contact-messages', adminContactRouter);
+  v1.use('/curriculum', curriculumRouter);
+  v1.use('/instructor/profile', instructorProfileRouter);
+  v1.use('/instructor/courses', instructorCoursesRouter);
 
   app.use('/api/v1', v1);
   app.use(notFoundHandler);

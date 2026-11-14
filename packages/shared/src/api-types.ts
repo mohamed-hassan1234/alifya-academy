@@ -187,8 +187,175 @@ export interface PublicSiteSettings {
   contact: { email: string | null; phones: string[]; address: string | null };
   social: Partial<Record<'facebook' | 'instagram' | 'linkedin' | 'x' | 'youtube' | 'tiktok', string | null>>;
   hero: { title: string | null; subtitle: string | null; imageUrl: string | null };
-  about: { summary: string | null };
+  about: {
+    summary: string | null;
+    introduction: string | null;
+    mission: string | null;
+    vision: string | null;
+    approach: string | null;
+    values: string[];
+    objectives: string[];
+  };
   defaultTimezone: string;
   defaultCurrency: Currency;
   supportedLanguages: SupportedLanguage[];
+}
+
+/* ---------- Programs ---------- */
+export interface ProgramCourseDto {
+  id: string;
+  title: string;
+  slug: string;
+  level: CourseLevel;
+  durationText: string;
+  isFree: boolean;
+  feeAmount: number;
+  currency: Currency;
+  thumbnailUrl: string | null;
+}
+
+export interface PublicProgramDto {
+  id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  description: string;
+  imageUrl: string | null;
+  durationText: string;
+  objectives: string[];
+  entryRequirements: string[];
+  /** Only PUBLISHED courses are included publicly. */
+  courses: ProgramCourseDto[];
+  coordinator: { id: string; fullName: string } | null;
+}
+
+export interface AdminProgramDto extends PublicProgramDto {
+  courseIds: string[];
+  coordinatorId: string | null;
+  publicationStatus: PublicationStatus;
+  displayOrder: number;
+  publishedAt: string | null;
+  updatedAt: string;
+}
+
+/* ---------- Instructors ---------- */
+export interface InstructorSocial {
+  linkedin?: string | null;
+  x?: string | null;
+  website?: string | null;
+  facebook?: string | null;
+}
+
+export interface PublicInstructorDto {
+  id: string; // user id
+  fullName: string;
+  professionalTitle: string;
+  specialization: string;
+  biography: string;
+  photoUrl: string | null;
+  social: InstructorSocial;
+}
+
+export interface PublicInstructorDetailDto extends PublicInstructorDto {
+  courses: ProgramCourseDto[];
+}
+
+export interface AdminInstructorDto extends PublicInstructorDto {
+  email: string;
+  status: UserStatus;
+  isPublic: boolean;
+  assignedCourses: { id: string; title: string; publicationStatus: PublicationStatus }[];
+}
+
+/* ---------- Curriculum ---------- */
+export interface LessonResourceDto {
+  mediaId: string;
+  title: string;
+}
+
+export interface ManagedLessonDto {
+  id: string;
+  sectionId: string;
+  title: string;
+  type: 'text' | 'video' | 'pdf';
+  summary: string;
+  content: string;
+  videoMediaId: string | null;
+  videoUrl: string | null;
+  pdfMediaId: string | null;
+  resources: LessonResourceDto[];
+  durationMinutes: number | null;
+  isPreview: boolean;
+  publicationStatus: 'draft' | 'published';
+  order: number;
+  updatedAt: string;
+}
+
+export interface ManagedSectionDto {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  lessons: ManagedLessonDto[];
+}
+
+export interface ManagedCurriculumDto {
+  course: { id: string; title: string; slug: string; publicationStatus: PublicationStatus };
+  sections: ManagedSectionDto[];
+  /** What the caller may do — mirrors server-side checks so the UI hides unusable actions. */
+  can: { edit: boolean; publish: boolean };
+}
+
+/** Public outline: titles only, never lesson bodies or private files. */
+export interface CurriculumOutlineDto {
+  sections: {
+    id: string;
+    title: string;
+    lessons: {
+      id: string;
+      title: string;
+      type: 'text' | 'video' | 'pdf';
+      durationMinutes: number | null;
+      isPreview: boolean;
+    }[];
+  }[];
+  totalLessons: number;
+  totalMinutes: number;
+}
+
+export interface LessonPreviewDto {
+  id: string;
+  title: string;
+  type: 'text' | 'video' | 'pdf';
+  summary: string;
+  content: string;
+  /** Short-lived link for uploaded media, or the external https video link. */
+  mediaUrl: string | null;
+  durationMinutes: number | null;
+}
+
+export interface InstructorCourseDto {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnailUrl: string | null;
+  publicationStatus: PublicationStatus;
+  displayStatus: CourseDisplayStatus;
+  startDate: string | null;
+  endDate: string | null;
+  timezone: string;
+  schedule: ScheduleSlot[];
+  lessonCount: number;
+  publishedLessonCount: number;
+}
+
+export interface ContactMessageDto {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: string;
+  message: string;
+  status: 'new' | 'read' | 'archived';
+  createdAt: string;
 }

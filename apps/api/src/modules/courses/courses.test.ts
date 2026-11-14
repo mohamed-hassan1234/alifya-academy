@@ -19,18 +19,15 @@ const DESCRIPTION = 'A practical introduction to analysing data with real-world 
 describe('course administration', () => {
   it('creates a draft that is invisible publicly until published', async () => {
     const { token, categoryId } = await adminWithCategory();
-    const created = await request(app)
-      .post('/api/v1/admin/courses')
-      .set(bearer(token))
-      .send({
-        title: 'Introduction to Data Science',
-        categoryId,
-        description: DESCRIPTION,
-        feeAmount: 15000,
-        registrationMode: 'open',
-        startDate: '2099-01-10',
-        endDate: '2099-03-10',
-      });
+    const created = await request(app).post('/api/v1/admin/courses').set(bearer(token)).send({
+      title: 'Introduction to Data Science',
+      categoryId,
+      description: DESCRIPTION,
+      feeAmount: 15000,
+      registrationMode: 'open',
+      startDate: '2099-01-10',
+      endDate: '2099-03-10',
+    });
     expect(created.status).toBe(201);
     expect(created.body.data).toMatchObject({
       slug: 'introduction-to-data-science',

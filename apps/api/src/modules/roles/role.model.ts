@@ -9,6 +9,12 @@ const roleSchema = new Schema(
     permissions: { type: [{ type: String, enum: ALL_PERMISSIONS }], default: [] },
     /** System roles cannot be deleted; super_admin permissions are locked to the full catalogue. */
     isSystem: { type: Boolean, default: false },
+    /**
+     * System roles only: the default permissions already offered by the seeder. New catalogue defaults are
+     * added exactly once; permissions an administrator removed afterwards are never re-added.
+     * Absent on roles created before this field existed (treated as "pre-v3 defaults offered").
+     */
+    seededPermissions: { type: [String], default: undefined },
     createdBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
     updatedBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   },

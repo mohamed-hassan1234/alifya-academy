@@ -12,6 +12,7 @@ import {
   type UpdateProfileInput,
 } from '@alifya/shared';
 import { DashboardPageHeader } from '@/components/layout/DashboardLayout';
+import { PasswordInput } from '@/components/shared/Uploaders';
 import { FormField, StatusBadge } from '@/components/shared';
 import { useToast } from '@/components/shared/toast';
 import { Button } from '@/components/ui/button';
@@ -177,13 +178,13 @@ function PasswordForm() {
       <h2 className="text-lg">{t('dashboard.changePassword')}</h2>
       {error && <AlertMessage tone="danger">{error}</AlertMessage>}
       <FormField label={t('dashboard.currentPassword')} error={e.currentPassword?.message}>
-        <Input type="password" autoComplete="current-password" {...form.register('currentPassword')} />
+        <PasswordInput autoComplete="current-password" {...form.register('currentPassword')} />
       </FormField>
       <FormField label={t('auth.newPassword')} hint={t('auth.passwordHint')} error={e.newPassword?.message}>
-        <Input type="password" autoComplete="new-password" {...form.register('newPassword')} />
+        <PasswordInput autoComplete="new-password" {...form.register('newPassword')} />
       </FormField>
       <FormField label={t('auth.confirmPassword')} error={e.confirmPassword?.message}>
-        <Input type="password" autoComplete="new-password" {...form.register('confirmPassword')} />
+        <PasswordInput autoComplete="new-password" {...form.register('confirmPassword')} />
       </FormField>
       <Button type="submit" className="self-start" loading={form.formState.isSubmitting}>
         {t('dashboard.changePassword')}

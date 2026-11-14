@@ -14,6 +14,7 @@ export default defineConfig({
       EMAIL_PROVIDER: 'memory',
       WEB_ORIGINS: 'http://localhost:5173',
       APP_URL: 'http://localhost:5173',
+      STORAGE_DIR: './.test-storage',
     },
   },
 });

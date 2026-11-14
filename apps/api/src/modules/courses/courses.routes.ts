@@ -10,7 +10,7 @@ import {
   updateCourseSchema,
 } from '@alifya/shared';
 import { authenticate } from '../../middleware/authenticate.js';
-import { requirePermission } from '../../middleware/authorize.js';
+import { requireAnyPermission, requirePermission } from '../../middleware/authorize.js';
 import { parse } from '../../middleware/validate.js';
 import { asyncHandler } from '../../utils/async-handler.js';
 import { ok, paginationMeta } from '../../utils/respond.js';
@@ -122,7 +122,7 @@ adminCoursesRouter.get(
 
 adminCoursesRouter.post(
   '/categories',
-  requirePermission('courses.update'),
+  requireAnyPermission('categories.manage', 'courses.update'),
   asyncHandler(async (req, res) => {
     const input = parse(categorySchema, req.body);
     ok(res, await courses.createCategory(requireUser(req).userId, input, requestContext(req)), 201);
@@ -131,7 +131,7 @@ adminCoursesRouter.post(
 
 adminCoursesRouter.patch(
   '/categories/:id',
-  requirePermission('courses.update'),
+  requireAnyPermission('categories.manage', 'courses.update'),
   asyncHandler(async (req, res) => {
     const input = parse(categorySchema.partial(), req.body);
     ok(

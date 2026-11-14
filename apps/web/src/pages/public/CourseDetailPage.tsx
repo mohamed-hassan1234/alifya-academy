@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar, faClock, faUser } from '@fortawesome/free-regular-svg-icons';
+import { CurriculumOutline } from '@/features/courses/CurriculumOutline';
 import { BackLink, EmptyState, ErrorState, StatusBadge } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/feedback';
@@ -103,6 +104,7 @@ export function CourseDetailPage() {
               </ul>
             </section>
           )}
+          <CurriculumOutline slug={c.slug} />
           {c.schedule.length > 0 && (
             <section>
               <h2 className="mb-2 text-2xl">{t('courses.schedule')}</h2>

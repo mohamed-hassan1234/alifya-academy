@@ -15,6 +15,7 @@ import { asyncHandler } from '../../utils/async-handler.js';
 import { ok } from '../../utils/respond.js';
 import { requestContext, requireUser } from '../../utils/request.js';
 import { audit } from '../audit/audit.service.js';
+import { assertPublicAssetUrl } from '../media/media.service.js';
 
 /* ------------------------------ model ------------------------------ */
 const siteSettingsSchema = new Schema(
@@ -42,7 +43,15 @@ const siteSettingsSchema = new Schema(
       subtitle: { type: String, default: null },
       imageUrl: { type: String, default: null },
     },
-    about: { summary: { type: String, default: null } },
+    about: {
+      summary: { type: String, default: null },
+      introduction: { type: String, default: null },
+      mission: { type: String, default: null },
+      vision: { type: String, default: null },
+      approach: { type: String, default: null },
+      values: { type: [String], default: [] },
+      objectives: { type: [String], default: [] },
+    },
     defaultTimezone: { type: String, default: DEFAULT_TIMEZONE },
     defaultCurrency: { type: String, enum: SUPPORTED_CURRENCIES, default: 'USD' },
     supportedLanguages: { type: [{ type: String, enum: SUPPORTED_LANGUAGES }], default: ['en', 'so'] },
@@ -79,7 +88,15 @@ export async function getPublicSettings(): Promise<PublicSiteSettings> {
       subtitle: s.hero?.subtitle ?? null,
       imageUrl: s.hero?.imageUrl ?? null,
     },
-    about: { summary: s.about?.summary ?? null },
+    about: {
+      summary: s.about?.summary ?? null,
+      introduction: s.about?.introduction ?? null,
+      mission: s.about?.mission ?? null,
+      vision: s.about?.vision ?? null,
+      approach: s.about?.approach ?? null,
+      values: s.about?.values ?? [],
+      objectives: s.about?.objectives ?? [],
+    },
     defaultTimezone: s.defaultTimezone,
     defaultCurrency: s.defaultCurrency as PublicSiteSettings['defaultCurrency'],
     supportedLanguages: s.supportedLanguages as PublicSiteSettings['supportedLanguages'],
@@ -120,6 +137,8 @@ adminSettingsRouter.patch(
   asyncHandler(async (req, res) => {
     const auth = requireUser(req);
     const input: UpdateSiteSettingsInput = parse(updateSiteSettingsSchema, req.body);
+    await assertPublicAssetUrl(input.logoUrl, 'logoUrl');
+    await assertPublicAssetUrl(input.hero?.imageUrl, 'hero.imageUrl');
     const set = flatten(input as Record<string, unknown>);
     await getOrCreate();
     await SiteSettings.updateOne({ key: 'site' }, { $set: { ...set, updatedBy: auth.userId } });

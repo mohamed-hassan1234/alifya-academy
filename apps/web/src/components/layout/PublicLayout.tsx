@@ -30,7 +30,11 @@ import { cn } from '@/lib/utils';
 
 const NAV = [
   { to: '/', key: 'nav.home', end: true },
+  { to: '/about', key: 'nav.about', end: false },
   { to: '/courses', key: 'nav.courses', end: false },
+  { to: '/programs', key: 'nav.programs', end: false },
+  { to: '/instructors', key: 'nav.instructors', end: false },
+  { to: '/contact', key: 'nav.contact', end: false },
 ] as const;
 
 export function LanguageSwitcher({ className }: { className?: string }) {
@@ -128,14 +132,14 @@ function SiteHeader() {
         <Link to="/" aria-label={`${settings.academyName} — ${t('nav.home')}`}>
           <Brand name={settings.academyName} logoUrl={settings.logoUrl} />
         </Link>
-        <nav aria-label={t('nav.primary')} className="hidden items-center gap-8 md:flex">
+        <nav aria-label={t('nav.primary')} className="hidden items-center gap-6 lg:flex xl:gap-8">
           {NAV.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
               {t(n.key)}
             </NavLink>
           ))}
         </nav>
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <LanguageSwitcher />
           {!initializing &&
             (user ? (
@@ -154,7 +158,7 @@ function SiteHeader() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="lg:hidden"
           onClick={() => setOpen(true)}
           aria-label={t('common.menu')}
           aria-expanded={open}

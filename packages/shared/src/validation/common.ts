@@ -34,3 +34,16 @@ export function slugify(input: string): string {
     .replace(/^-+|-+$/g, '')
     .slice(0, 140);
 }
+
+/** Uploaded-media URL (/api/v1/media/:id/content) or an absolute https URL. */
+export const assetUrlSchema = z
+  .string()
+  .trim()
+  .max(2048)
+  .refine(
+    (v) => /^\/api\/v1\/media\/[a-f0-9]{24}\/content$/.test(v) || /^https:\/\//.test(v),
+    'Use an uploaded file or an https URL',
+  );
+
+/** Matches the API's own upload URLs and extracts the media id. */
+export const MEDIA_URL_RE = /^\/api\/v1\/media\/([a-f0-9]{24})\/content$/;

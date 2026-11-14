@@ -2,10 +2,12 @@ import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
 import { connectDatabase, disconnectDatabase } from './database/connection.js';
+import { ensureStorageReady } from './integrations/storage/index.js';
 import { seedRbac } from './modules/roles/roles.service.js';
 
 async function main() {
   await connectDatabase(env.MONGODB_URI);
+  await ensureStorageReady();
   await seedRbac(); // idempotent: keeps the permission catalogue and system roles in sync with code
   const server = createApp().listen(env.PORT, () =>
     logger.info(`API listening on http://localhost:${env.PORT}/api/v1`),

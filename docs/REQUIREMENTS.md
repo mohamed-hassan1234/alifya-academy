@@ -1,5 +1,7 @@
 # Alifya Academy — Requirements Checklist
 
+> **Superseded:** requirement status now lives in `ALIFYA_REQUIREMENTS_GAP_ANALYSIS.md` (mapped to the original PDF). This file is kept as the iteration-1 checklist.
+
 Source: _Alifya Academy Ultimate Advanced Master Development Prompt_. Every requirement is converted into an
 actionable item. Status legend:
 

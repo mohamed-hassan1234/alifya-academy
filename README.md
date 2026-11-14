@@ -2,8 +2,10 @@
 
 MERN-stack (MongoDB · Express · React · Node) monorepo in TypeScript.
 
-> **Status:** foundation phases in progress. See [`docs/DEVELOPMENT_PROGRESS.md`](docs/DEVELOPMENT_PROGRESS.md) and [`docs/SECURITY.md`](docs/SECURITY.md) for exactly
-> what is implemented and verified, and [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for the full checklist.
+> **Status:** in progress — not production-ready. Exactly what is implemented and verified:
+> [`docs/IMPLEMENTATION_PROGRESS.md`](docs/IMPLEMENTATION_PROGRESS.md) · requirement-by-requirement status against the original PDF:
+> [`docs/ALIFYA_REQUIREMENTS_GAP_ANALYSIS.md`](docs/ALIFYA_REQUIREMENTS_GAP_ANALYSIS.md) · external dependencies:
+> [`docs/KNOWN_BLOCKERS.md`](docs/KNOWN_BLOCKERS.md) · security: [`docs/SECURITY.md`](docs/SECURITY.md).
 
 ## Repository layout
 

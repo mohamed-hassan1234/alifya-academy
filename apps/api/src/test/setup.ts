@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ensureStorageReady } from '../integrations/storage/index.js';
 import { afterAll, beforeAll, beforeEach, inject } from 'vitest';
 import { emailSender, type MemoryEmailSender } from '../integrations/email/index.js';
 import { seedRbac } from '../modules/roles/roles.service.js';
@@ -6,6 +7,7 @@ import { seedRbac } from '../modules/roles/roles.service.js';
 const KEEP = new Set(['roles', 'permissions']);
 
 beforeAll(async () => {
+  await ensureStorageReady();
   const uri = inject('mongoUri');
   const dbName = `test_${process.pid}_${Math.random().toString(36).slice(2, 8)}`;
   await mongoose.connect(uri, { dbName });

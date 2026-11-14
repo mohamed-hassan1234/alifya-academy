@@ -67,7 +67,10 @@ describe('registration → verification → login journey', () => {
   it('never stores plain-text passwords', async () => {
     await request(app).post('/api/v1/auth/register').send(registration);
     const doc = await User.findOne({ email: 'amina@example.com' }).select('+passwordHash').lean();
-    expect(doc?.passwordHash).toMatch(/^\$2[aby]\$12\$/);
+    expect(doc?.passwordHash).toMatch(/^\$2[aby]\$04\$/); // test cost
+    // Production must keep cost 12 (only NODE_ENV=test lowers it).
+    const { PRODUCTION_BCRYPT_COST } = await import('./auth.service.js');
+    expect(PRODUCTION_BCRYPT_COST).toBe(12);
   });
 
   it('does not reveal whether an email is already registered', async () => {

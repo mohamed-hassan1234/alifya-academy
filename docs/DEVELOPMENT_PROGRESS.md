@@ -1,6 +1,6 @@
 # Development Progress
 
-Status legend and the full requirement checklist live in [`REQUIREMENTS.md`](REQUIREMENTS.md).
+Iteration 1 log. Current status: [`IMPLEMENTATION_PROGRESS.md`](IMPLEMENTATION_PROGRESS.md) and [`ALIFYA_REQUIREMENTS_GAP_ANALYSIS.md`](ALIFYA_REQUIREMENTS_GAP_ANALYSIS.md).
 
 ## Iteration 1 — 2026-11-14: Foundation, authentication, RBAC, courses
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { USER_STATUSES, SUPPORTED_CURRENCIES, SUPPORTED_LANGUAGES } from '../enums.js';
 import { isPermission } from '../permissions.js';
-import { objectIdSchema, paginationQuerySchema, timezoneSchema } from './common.js';
+import { assetUrlSchema, objectIdSchema, paginationQuerySchema, timezoneSchema } from './common.js';
 
 export const userListQuerySchema = paginationQuerySchema.extend({
   q: z.string().trim().max(100).optional(),
@@ -50,7 +50,7 @@ const optionalUrl = url.nullable().optional();
 export const updateSiteSettingsSchema = z.object({
   academyName: z.string().trim().min(2).max(120).optional(),
   tagline: z.string().trim().max(200).optional(),
-  logoUrl: optionalUrl,
+  logoUrl: assetUrlSchema.nullable().optional(),
   contact: z
     .object({
       email: z.string().trim().email().max(254).nullable().optional(),
@@ -72,10 +72,20 @@ export const updateSiteSettingsSchema = z.object({
     .object({
       title: z.string().trim().max(160).nullable().optional(),
       subtitle: z.string().trim().max(400).nullable().optional(),
-      imageUrl: optionalUrl,
+      imageUrl: assetUrlSchema.nullable().optional(),
     })
     .optional(),
-  about: z.object({ summary: z.string().trim().max(1500).nullable().optional() }).optional(),
+  about: z
+    .object({
+      summary: z.string().trim().max(1500).nullable().optional(),
+      introduction: z.string().trim().max(5000).nullable().optional(),
+      mission: z.string().trim().max(1500).nullable().optional(),
+      vision: z.string().trim().max(1500).nullable().optional(),
+      approach: z.string().trim().max(3000).nullable().optional(),
+      values: z.array(z.string().trim().min(1).max(200)).max(12).optional(),
+      objectives: z.array(z.string().trim().min(1).max(300)).max(12).optional(),
+    })
+    .optional(),
   defaultTimezone: timezoneSchema.optional(),
   defaultCurrency: z.enum(SUPPORTED_CURRENCIES).optional(),
   supportedLanguages: z.array(z.enum(SUPPORTED_LANGUAGES)).min(1).optional(),

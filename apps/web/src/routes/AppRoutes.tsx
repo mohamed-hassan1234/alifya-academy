@@ -18,6 +18,24 @@ const RegisterPage = named(auth, 'RegisterPage');
 const ForgotPasswordPage = named(auth, 'ForgotPasswordPage');
 const ResetPasswordPage = named(auth, 'ResetPasswordPage');
 const VerifyEmailPage = named(auth, 'VerifyEmailPage');
+const info = () => import('@/pages/public/InfoPages');
+const AboutPage = named(info, 'AboutPage');
+const ProgramsPage = named(info, 'ProgramsPage');
+const ProgramDetailPage = named(info, 'ProgramDetailPage');
+const InstructorsPage = named(info, 'InstructorsPage');
+const InstructorDetailPage = named(info, 'InstructorDetailPage');
+const ContactPage = named(info, 'ContactPage');
+const academic = () => import('@/pages/admin/AcademicAdminPages');
+const AdminProgramsPage = named(academic, 'AdminProgramsPage');
+const AdminProgramFormPage = named(academic, 'AdminProgramFormPage');
+const AdminInstructorsPage = named(academic, 'AdminInstructorsPage');
+const AdminContactMessagesPage = named(academic, 'AdminContactMessagesPage');
+const CurriculumManagerPage = lazy(() =>
+  import('@/pages/admin/CurriculumManagerPage').then((m) => ({ default: m.CurriculumManagerPage })),
+);
+const instructor = () => import('@/pages/instructor/InstructorPages');
+const InstructorDashboardPage = named(instructor, 'InstructorDashboardPage');
+const InstructorProfilePage = named(instructor, 'InstructorProfilePage');
 const DashboardLayout = named(() => import('@/components/layout/DashboardLayout'), 'DashboardLayout');
 const student = () => import('@/pages/dashboard/StudentPages');
 const StudentDashboardPage = named(student, 'StudentDashboardPage');
@@ -54,6 +72,12 @@ export function AppRoutes() {
           <Route index element={<HomePage />} />
           <Route path="courses" element={<CoursesPage />} />
           <Route path="courses/:slug" element={<CourseDetailPage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="programs" element={<ProgramsPage />} />
+          <Route path="programs/:slug" element={<ProgramDetailPage />} />
+          <Route path="instructors" element={<InstructorsPage />} />
+          <Route path="instructors/:id" element={<InstructorDetailPage />} />
+          <Route path="contact" element={<ContactPage />} />
           <Route path="verify-email" element={<VerifyEmailPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route element={<GuestOnlyRoute />}>
@@ -70,6 +94,15 @@ export function AppRoutes() {
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<StudentDashboardPage />} />
               <Route path="profile" element={<ProfilePage />} />
+            </Route>
+            <Route path="instructor">
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<InstructorDashboardPage />} />
+              <Route path="profile" element={<InstructorProfilePage />} />
+              <Route
+                path="courses/:id/curriculum"
+                element={<CurriculumManagerPage backTo={() => '/instructor/dashboard'} />}
+              />
             </Route>
             <Route path="admin">
               <Route index element={<AdminIndexRedirect />} />
@@ -99,9 +132,57 @@ export function AppRoutes() {
                 }
               />
               <Route
+                path="courses/:id/curriculum"
+                element={
+                  <PermissionGuard all={['courses.read']}>
+                    <CurriculumManagerPage backTo={(id) => `/admin/courses/${id}`} />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="programs"
+                element={
+                  <PermissionGuard all={['programs.manage']}>
+                    <AdminProgramsPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="programs/new"
+                element={
+                  <PermissionGuard all={['programs.manage']}>
+                    <AdminProgramFormPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="programs/:id"
+                element={
+                  <PermissionGuard all={['programs.manage']}>
+                    <AdminProgramFormPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="instructors"
+                element={
+                  <PermissionGuard any={['instructors.read', 'instructors.manage', 'users.read']}>
+                    <AdminInstructorsPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="contact-messages"
+                element={
+                  <PermissionGuard any={['cms.manage', 'settings.manage']}>
+                    <AdminContactMessagesPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
                 path="categories"
                 element={
-                  <PermissionGuard all={['courses.update']}>
+                  <PermissionGuard any={['categories.manage', 'courses.update']}>
                     <AdminCategoriesPage />
                   </PermissionGuard>
                 }

@@ -38,3 +38,12 @@
 ## Not yet implemented
 
 File-upload validation and private storage, rich-text sanitisation (CMS), payment webhook verification and idempotency, private meeting-link protection, data retention policies, and a formal penetration test — scheduled with their modules.
+
+## File uploads (iteration 2)
+
+- Uploads require authentication _before_ any bytes are written to disk; 200 MB hard cap, smaller per-purpose limits.
+- File type is decided by **content sniffing** (magic bytes), never by extension or client MIME; SVG is not accepted anywhere.
+- Storage keys are random server-generated paths; display names are sanitised; path traversal is rejected by the storage driver.
+- Public files are immutable and cacheable; private files (lesson resources) are served only to the owner, to users a module resolver authorises (course managers), or via a 10-minute HMAC-signed link.
+- Public-facing image fields reject private files and deleted uploads.
+- Only the owner, or staff holding the purpose's permission, can delete a file.

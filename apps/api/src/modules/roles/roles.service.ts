@@ -4,6 +4,7 @@ import {
   PERMISSION_CATALOGUE,
   SYSTEM_ROLES,
   SYSTEM_ROLE_KEYS,
+  V3_ADDED_PERMISSIONS,
   type Permission,
   type PermissionInfo,
   type RoleDetail,
@@ -30,17 +31,37 @@ export async function seedRbac(): Promise<void> {
   await PermissionModel.deleteMany({ key: { $nin: ALL_PERMISSIONS } });
   for (const key of SYSTEM_ROLE_KEYS) {
     const def = SYSTEM_ROLES[key];
+    const defaults = [...def.permissions];
+    const existing = await Role.findOne({ key }).select('seededPermissions').lean();
+    if (!existing) {
+      await Role.create({
+        key,
+        name: def.name,
+        description: def.description,
+        permissions: defaults,
+        seededPermissions: defaults,
+        isSystem: true,
+      });
+      continue;
+    }
+    if (key === 'super_admin') {
+      await Role.updateOne(
+        { key },
+        { $set: { isSystem: true, permissions: [...ALL_PERMISSIONS], seededPermissions: defaults } },
+      );
+      continue;
+    }
+    // Backward-compatible migration: offer only defaults this role has never been offered.
+    const offered = new Set<string>(
+      existing.seededPermissions ?? defaults.filter((p) => !V3_ADDED_PERMISSIONS.includes(p)),
+    );
+    const fresh = defaults.filter((p) => !offered.has(p));
     await Role.updateOne(
       { key },
       {
-        $set: { isSystem: true, ...(key === 'super_admin' ? { permissions: [...ALL_PERMISSIONS] } : {}) },
-        $setOnInsert: {
-          name: def.name,
-          description: def.description,
-          ...(key === 'super_admin' ? {} : { permissions: [...def.permissions] }),
-        },
+        $set: { isSystem: true, seededPermissions: defaults },
+        ...(fresh.length ? { $addToSet: { permissions: { $each: fresh } } } : {}),
       },
-      { upsert: true },
     );
   }
   // Remove permissions that were dropped from the catalogue.

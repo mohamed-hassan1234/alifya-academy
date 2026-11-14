@@ -6,3 +6,5 @@ export * from './validation/common.js';
 export * from './validation/auth.js';
 export * from './validation/courses.js';
 export * from './validation/admin.js';
+export * from './media.js';
+export * from './validation/academic.js';

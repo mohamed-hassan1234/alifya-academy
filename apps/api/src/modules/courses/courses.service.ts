@@ -15,6 +15,7 @@ import { escapeRegex } from '../../utils/regex.js';
 import type { RequestContext } from '../../utils/request.js';
 import { audit } from '../audit/audit.service.js';
 import { Role } from '../roles/role.model.js';
+import { assertPublicAssetUrl } from '../media/media.service.js';
 import { User } from '../users/user.model.js';
 import { Category, Course } from './course.model.js';
 import {
@@ -192,7 +193,11 @@ export async function createCourse(
   input: CreateCourse,
   ctx: RequestContext,
 ): Promise<AdminCourseDto> {
-  await Promise.all([assertCategory(input.categoryId), assertInstructors(input.instructorIds)]);
+  await Promise.all([
+    assertPublicAssetUrl(input.thumbnailUrl, 'thumbnailUrl'),
+    assertCategory(input.categoryId),
+    assertInstructors(input.instructorIds),
+  ]);
   let slug: string;
   if (input.slug) {
     await assertSlugFree(Course, input.slug);
@@ -228,6 +233,7 @@ export async function updateCourse(
   if (!course) throw ApiError.notFound('Course not found');
   if (course.publicationStatus === 'archived') throw ApiError.conflict('Archived courses cannot be edited');
   await Promise.all([
+    assertPublicAssetUrl(input.thumbnailUrl, 'thumbnailUrl'),
     assertCategory(input.categoryId),
     input.instructorIds ? assertInstructors(input.instructorIds) : null,
   ]);

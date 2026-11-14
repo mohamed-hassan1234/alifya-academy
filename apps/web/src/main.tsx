@@ -1,5 +1,5 @@
 import { Component, StrictMode, type ErrorInfo, type ReactNode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config as faConfig } from '@fortawesome/fontawesome-svg-core';
@@ -65,7 +65,11 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean
   }
 }
 
-createRoot(document.getElementById('root')!).render(
+// Reuse the root if this module re-executes (Vite HMR re-runs main.tsx when a non-component module
+// changes); calling createRoot twice would mount a second, stale app tree.
+const container = document.getElementById('root')! as HTMLElement & { __alfRoot?: Root };
+container.__alfRoot ??= createRoot(container);
+container.__alfRoot.render(
   <StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

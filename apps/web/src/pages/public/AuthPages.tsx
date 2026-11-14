@@ -13,6 +13,7 @@ import {
   type RegisterInput,
   type ResetPasswordInput,
 } from '@alifya/shared';
+import { PasswordInput } from '@/components/shared/Uploaders';
 import { FormField } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { AlertMessage } from '@/components/ui/feedback';
@@ -83,7 +84,7 @@ export function LoginPage() {
           <Input type="email" autoComplete="email" inputMode="email" {...form.register('email')} />
         </FormField>
         <FormField label={t('auth.password')} error={form.formState.errors.password?.message}>
-          <Input type="password" autoComplete="current-password" {...form.register('password')} />
+          <PasswordInput autoComplete="current-password" {...form.register('password')} />
         </FormField>
         <Link
           to="/forgot-password"
@@ -164,10 +165,10 @@ export function RegisterPage() {
           <Input type="tel" autoComplete="tel" inputMode="tel" {...form.register('phone')} />
         </FormField>
         <FormField label={t('auth.password')} hint={t('auth.passwordHint')} error={e.password?.message}>
-          <Input type="password" autoComplete="new-password" {...form.register('password')} />
+          <PasswordInput autoComplete="new-password" {...form.register('password')} />
         </FormField>
         <FormField label={t('auth.confirmPassword')} error={e.confirmPassword?.message}>
-          <Input type="password" autoComplete="new-password" {...form.register('confirmPassword')} />
+          <PasswordInput autoComplete="new-password" {...form.register('confirmPassword')} />
         </FormField>
         <div>
           <label className="flex items-start gap-3 text-sm">
@@ -274,10 +275,10 @@ export function ResetPasswordPage() {
             hint={t('auth.passwordHint')}
             error={form.formState.errors.password?.message}
           >
-            <Input type="password" autoComplete="new-password" {...form.register('password')} />
+            <PasswordInput autoComplete="new-password" {...form.register('password')} />
           </FormField>
           <FormField label={t('auth.confirmPassword')} error={form.formState.errors.confirmPassword?.message}>
-            <Input type="password" autoComplete="new-password" {...form.register('confirmPassword')} />
+            <PasswordInput autoComplete="new-password" {...form.register('confirmPassword')} />
           </FormField>
           <Button type="submit" size="lg" loading={form.formState.isSubmitting}>
             {t('auth.resetSubmit')}

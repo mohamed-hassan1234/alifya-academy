@@ -72,6 +72,8 @@ export function useAuth(): AuthContextValue {
 /** Staff permissions that unlock the administration area. */
 export const ADMIN_AREA_PERMISSIONS: Permission[] = [
   'courses.read',
+  'programs.manage',
+  'instructors.read',
   'users.read',
   'permissions.manage',
   'audit_logs.read',
@@ -79,5 +81,7 @@ export const ADMIN_AREA_PERMISSIONS: Permission[] = [
 ];
 
 export function dashboardPathFor(user: CurrentUser): string {
-  return user.permissions.some((p) => ADMIN_AREA_PERMISSIONS.includes(p)) ? '/admin' : '/student/dashboard';
+  if (user.permissions.some((p) => ADMIN_AREA_PERMISSIONS.includes(p))) return '/admin';
+  if (user.roles.some((r) => r.key === 'instructor')) return '/instructor/dashboard';
+  return '/student/dashboard';
 }
