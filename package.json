@@ -6,21 +6,31 @@
   "description": "Alifya Academy — Learning Management & Educational Operations Platform",
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "backend",
+    "frontend"
   ],
   "engines": {
-    "node": ">=20.11"
+    "node": ">=20.11",
+    "npm": ">=10"
   },
   "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "bootstrap": "node scripts/bootstrap.mjs",
     "dev": "concurrently -k -n api,web -c green,yellow \"npm run dev -w @alifya/api\" \"npm run dev -w @alifya/web\"",
+    "dev:backend": "npm run dev -w @alifya/api",
+    "dev:frontend": "npm run dev -w @alifya/web",
     "build": "npm run build -w @alifya/api && npm run build -w @alifya/web",
+    "start": "npm run start -w @alifya/api",
+    "preview": "concurrently -k -n api,web -c green,yellow \"npm run start -w @alifya/api\" \"npm run preview -w @alifya/web\"",
+    "seed": "npm run seed -w @alifya/api --",
+    "seed:verify": "npm run seed:verify -w @alifya/api --",
+    "admin:create": "npm run admin:create -w @alifya/api --",
+    "db:dev": "node scripts/dev-mongo.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "npm run test --workspaces --if-present",
-    "seed": "npm run seed -w @alifya/api",
-    "db:dev": "node scripts/dev-mongo.mjs"
+    "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

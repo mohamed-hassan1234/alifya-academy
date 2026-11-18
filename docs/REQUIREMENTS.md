@@ -14,7 +14,7 @@ are all in place (§37 completion criteria).
 
 ## Foundation (Phase 2–3)
 
-- [x] npm-workspaces monorepo: `apps/web`, `apps/api`, `packages/shared`, `packages/design-tokens`
+- [x] npm-workspaces monorepo: `frontend`, `backend`, `packages/shared`, `packages/design-tokens`
 - [x] TypeScript strict mode everywhere
 - [x] Environment validation (zod) with `.env.example`
 - [x] MongoDB connection with graceful shutdown
@@ -25,7 +25,7 @@ are all in place (§37 completion criteria).
 - [x] Brand tokens (palette, typography) centralised as CSS variables + Tailwind theme
 - [x] DM Serif Display + Manrope, Font Awesome icons
 - [~] Reusable component library (core set done; DataTable, DateTimePicker, FileUploader, Drawer, Stepper pending)
-- [ ] Official logo — **blocked: asset not supplied**. `SiteSettings.logoUrl` is the configurable reference; until set, the academy name is rendered as text (no invented logo)
+- [x] Official logo — supplied 2026-11-18, bundled at `frontend/public/logo.png` (favicon/app icons derived from it); `SiteSettings.logoUrl` can override it
 - [ ] Playwright E2E harness
 - [ ] CI pipeline (GitHub Actions)
 

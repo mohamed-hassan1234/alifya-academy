@@ -8,8 +8,8 @@ Baseline state before changes: typecheck clean · lint 0 errors / 8 warnings · 
 | Item             | State                                                                                                                                                                                           |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Git              | Repository initialised in iteration 1; first commit `cb189a4` is the safe checkpoint. Branch `main`.                                                                                            |
-| Workspaces       | `apps/api`, `apps/web`, `packages/shared` (types + validation + permissions — fulfils both `shared-types` and `shared-validation` from the recommended layout), `packages/design-tokens`        |
-| Env config       | `apps/api/.env.example`; env validated by zod at boot; production refuses console email / insecure cookies                                                                                      |
+| Workspaces       | `backend`, `frontend`, `packages/shared` (types + validation + permissions — fulfils both `shared-types` and `shared-validation` from the recommended layout), `packages/design-tokens`         |
+| Env config       | `backend/.env.example`; env validated by zod at boot; production refuses console email / insecure cookies                                                                                       |
 | Database backups | **None configured.** Dev uses `npm run db:dev` (see KNOWN_BLOCKERS — it did not preserve data across an unclean shutdown). No production database exists yet, so no destructive migration risk. |
 | Migrations       | Schema changes this iteration are additive (new collections, new optional fields). One data migration: RBAC role seeding (`seededPermissions`), idempotent and non-destructive.                 |
 

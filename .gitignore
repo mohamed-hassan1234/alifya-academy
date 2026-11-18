@@ -1,13 +1,32 @@
-!.env.example
+# ---- Dependencies ----
+node_modules/
+
+# ---- Build output / caches ----
+dist/
+coverage/
+*.tsbuildinfo
+.vite/
+
+# ---- Logs ----
 *.log
-.DS_Store
-.data/
+npm-debug.log*
+
+# ---- Environment files (secrets) ----
+# Real env files are never committed; only the *.example templates are.
 .env
 .env.*
-.test-storage/
-coverage/
-dist/
-node_modules/
+!.env.example
+!**/.env.example
+
+# ---- Local data ----
+.data/
+/backend/storage/
+/backend/.test-storage/
+
+# ---- Test reports ----
 playwright-report/
-storage/
 test-results/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
