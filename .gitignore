@@ -19,6 +19,8 @@ npm-debug.log*
 !**/.env.example
 
 # ---- Local data ----
+# Local-only files such as the demo credentials sheet (backend/demo-accounts.local.md)
+*.local.*
 .data/
 /backend/storage/
 /backend/.test-storage/

@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "seed": "tsx --env-file-if-exists=.env src/scripts/seed.ts",
     "seed:verify": "tsx --env-file-if-exists=.env src/scripts/verify-seed.ts",
+    "seed:demo": "tsx --env-file-if-exists=.env src/scripts/seed-demo.ts",
     "admin:create": "tsx --env-file-if-exists=.env src/scripts/create-admin.ts",
     "seed:prod": "node --env-file-if-exists=.env dist/scripts/seed.js",
     "seed:verify:prod": "node --env-file-if-exists=.env dist/scripts/verify-seed.js",

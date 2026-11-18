@@ -343,6 +343,22 @@ npm run admin:create
 Non-interactive alternative (CI/provisioning): set `SEED_SUPERADMIN_EMAIL`, `SEED_SUPERADMIN_PASSWORD` (and
 optionally `SEED_SUPERADMIN_NAME`) in `backend/.env`, run `npm run seed`, then **remove the password from the file**.
 
+### Demo accounts for every role (development only)
+
+```bash
+npm run seed:demo
+```
+
+Creates one ready-to-use sign-in per system role — `student@demo.alifya.test`, `instructor@…`,
+`admissions.officer@…`, `finance.officer@…`, `content.manager@…`, `academy.admin@…` and `super.admin@…` — each
+active, email-verified and holding only its role. Each gets a **random** password, and the emails, passwords, landing
+page, available screens and full permission list per role are written to **`backend/demo-accounts.local.md`**
+(git-ignored; passwords are never printed in the terminal).
+
+- Safe to repeat: existing demo accounts are left as they are; only `@demo.alifya.test` accounts are ever touched.
+- Lost a password? `npm run seed:demo -- --reset-passwords` gives every demo account a new one.
+- Refuses to run with `NODE_ENV=production`. Never use these accounts on a server others can reach.
+
 ## 12. Development
 
 ```bash
@@ -413,6 +429,7 @@ All commands run from the repository root.
 | `npm run seed`                    | Idempotently seed permissions, roles, site settings (and optional first admin)        |
 | `npm run seed:verify`             | Read-only verification of the seeded data                                             |
 | `npm run admin:create`            | Interactively create (or promote) a Super Administrator                               |
+| `npm run seed:demo`               | Create demo sign-ins for every role (dev only) → `backend/demo-accounts.local.md`     |
 | `npm run dev`                     | Run API and web app with hot reload                                                   |
 | `npm run dev:backend`             | Run only the API                                                                      |
 | `npm run dev:frontend`            | Run only the web app                                                                  |

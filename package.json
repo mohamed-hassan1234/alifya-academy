@@ -24,6 +24,7 @@
     "preview": "concurrently -k -n api,web -c green,yellow \"npm run start -w @alifya/api\" \"npm run preview -w @alifya/web\"",
     "seed": "npm run seed -w @alifya/api --",
     "seed:verify": "npm run seed:verify -w @alifya/api --",
+    "seed:demo": "npm run seed:demo -w @alifya/api --",
     "admin:create": "npm run admin:create -w @alifya/api --",
     "db:dev": "node scripts/dev-mongo.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
