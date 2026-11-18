@@ -21,7 +21,7 @@ export function Modal({ open, onOpenChange, title, description, children, footer
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-[1px] data-[state=open]:animate-[fade_150ms_ease-out]" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[rgb(10_20_17/0.55)] backdrop-blur-[1px] data-[state=open]:animate-[fade_150ms_ease-out]" />
         <DialogPrimitive.Content
           className={cn(
             'fixed left-1/2 top-1/2 z-50 max-h-[90dvh] w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-border bg-background p-6 shadow-card',
@@ -63,19 +63,39 @@ interface DrawerProps {
   title: string;
   children: ReactNode;
   side?: 'left' | 'right';
+  /** Wider panel for reading content (e.g. roadmap stage details). */
+  wide?: boolean;
+  /** Element to focus after closing, when the drawer was opened without a Trigger. */
+  returnFocusTo?: () => HTMLElement | null;
 }
 
 /** Off-canvas navigation drawer (mobile menus, collapsed dashboard sidebar). */
-export function Drawer({ open, onOpenChange, title, children, side = 'right' }: DrawerProps) {
+export function Drawer({
+  open,
+  onOpenChange,
+  title,
+  children,
+  side = 'right',
+  wide = false,
+  returnFocusTo,
+}: DrawerProps) {
   const { t } = useTranslation();
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-primary/40" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[rgb(10_20_17/0.55)]" />
         <DialogPrimitive.Content
           aria-describedby={undefined}
+          onCloseAutoFocus={(e) => {
+            const el = returnFocusTo?.();
+            if (el) {
+              e.preventDefault();
+              el.focus();
+            }
+          }}
           className={cn(
-            'fixed inset-y-0 z-50 flex w-[min(20rem,86vw)] flex-col bg-background shadow-card',
+            'fixed inset-y-0 z-50 flex flex-col bg-background shadow-card',
+            wide ? 'w-[min(32rem,94vw)]' : 'w-[min(20rem,86vw)]',
             side === 'right' ? 'right-0 border-l border-border' : 'left-0 border-r border-border',
           )}
         >

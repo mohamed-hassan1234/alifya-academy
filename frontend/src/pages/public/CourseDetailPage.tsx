@@ -1,11 +1,11 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar, faClock, faUser } from '@fortawesome/free-regular-svg-icons';
+import { ApplyPanel } from '@/features/courses/ApplyPanel';
 import { CurriculumOutline } from '@/features/courses/CurriculumOutline';
 import { BackLink, EmptyState, ErrorState, StatusBadge } from '@/components/shared';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/feedback';
 import { formatDate, formatMoney } from '@/lib/format';
 import { normalizeError } from '@/lib/api';
@@ -158,25 +158,7 @@ export function CourseDetailPage() {
               )}
             </dl>
             <div className="mt-6">
-              {c.registrationOpen ? (
-                <>
-                  {/* Application workflow ships in Phase 7; do not present a non-functional apply button. */}
-                  <Button className="w-full" size="lg" disabled aria-describedby="apply-note">
-                    {t('courses.apply')}
-                  </Button>
-                  <p id="apply-note" className="mt-3 flex gap-2 text-xs text-muted-foreground">
-                    <FontAwesomeIcon icon={faCircleInfo} className="mt-0.5" aria-hidden />
-                    {t('courses.applySoon')}
-                  </p>
-                </>
-              ) : (
-                <p className="rounded-md bg-mint p-3 text-sm text-foreground/85">
-                  {t('courses.registrationClosedNote')}
-                </p>
-              )}
-              <Button variant="link" asChild className="mt-3">
-                <Link to="/courses">{t('courses.title')}</Link>
-              </Button>
+              <ApplyPanel course={c} />
             </div>
           </div>
         </aside>

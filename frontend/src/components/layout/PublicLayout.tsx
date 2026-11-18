@@ -25,6 +25,7 @@ import { Brand } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { Drawer } from '@/components/ui/dialog';
 import { dashboardPathFor, useAuth } from '@/features/auth/AuthProvider';
+import { ThemeToggle } from '@/features/theme/ThemeToggle';
 import { FALLBACK_SETTINGS, useSiteSettings } from '@/lib/queries';
 import { cn } from '@/lib/utils';
 
@@ -32,6 +33,8 @@ const NAV = [
   { to: '/', key: 'nav.home', end: true },
   { to: '/about', key: 'nav.about', end: false },
   { to: '/courses', key: 'nav.courses', end: false },
+  { to: '/roadmaps', key: 'nav.roadmaps', end: false },
+  { to: '/webinars', key: 'nav.webinars', end: false },
   { to: '/programs', key: 'nav.programs', end: false },
   { to: '/instructors', key: 'nav.instructors', end: false },
   { to: '/contact', key: 'nav.contact', end: false },
@@ -71,7 +74,7 @@ export function UserMenu() {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="inline-flex h-10 items-center gap-2 rounded-md pl-1 pr-2 text-sm font-semibold text-primary hover:bg-mint">
         <span
-          className="grid h-8 w-8 place-items-center rounded-full bg-primary text-xs text-white"
+          className="grid h-8 w-8 place-items-center rounded-full bg-brand text-xs text-brand-foreground"
           aria-hidden
         >
           {initials}
@@ -129,17 +132,19 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
       <div className="container flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
-        <Link to="/" aria-label={`${settings.academyName} — ${t('nav.home')}`}>
+        <Link to="/" className="shrink-0" aria-label={`${settings.academyName} — ${t('nav.home')}`}>
           <Brand name={settings.academyName} logoUrl={settings.logoUrl} />
         </Link>
-        <nav aria-label={t('nav.primary')} className="hidden items-center gap-6 lg:flex xl:gap-8">
-          {NAV.map((n) => (
+        {/* The logo links home, so "Home" is left out of the desktop bar (it stays in the mobile menu). */}
+        <nav aria-label={t('nav.primary')} className="hidden items-center gap-5 xl:flex 2xl:gap-7">
+          {NAV.filter((n) => n.to !== '/').map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
               {t(n.key)}
             </NavLink>
           ))}
         </nav>
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden shrink-0 items-center gap-2 xl:flex">
+          <ThemeToggle />
           <LanguageSwitcher />
           {!initializing &&
             (user ? (
@@ -155,16 +160,18 @@ function SiteHeader() {
               </>
             ))}
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          onClick={() => setOpen(true)}
-          aria-label={t('common.menu')}
-          aria-expanded={open}
-        >
-          <FontAwesomeIcon icon={faBars} className="text-lg" />
-        </Button>
+        <div className="flex items-center gap-1 xl:hidden">
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setOpen(true)}
+            aria-label={t('common.menu')}
+            aria-expanded={open}
+          >
+            <FontAwesomeIcon icon={faBars} className="text-lg" />
+          </Button>
+        </div>
       </div>
 
       {/* MobileNavigation */}
@@ -228,7 +235,7 @@ function SiteFooter() {
   const hasContact = !!(s.contact.email || s.contact.phones.length || s.contact.address);
 
   return (
-    <footer className="mt-auto bg-primary text-white/80">
+    <footer className="mt-auto bg-brand text-white/80 dark:bg-ivory dark:border-t dark:border-border">
       <div className="container grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Brand name={s.academyName} logoUrl={s.logoUrl} inverted />

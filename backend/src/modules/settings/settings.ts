@@ -44,6 +44,7 @@ const siteSettingsSchema = new Schema(
       imageUrl: { type: String, default: null },
     },
     about: {
+      imageUrl: { type: String, default: null },
       summary: { type: String, default: null },
       introduction: { type: String, default: null },
       mission: { type: String, default: null },
@@ -89,6 +90,7 @@ export async function getPublicSettings(): Promise<PublicSiteSettings> {
       imageUrl: s.hero?.imageUrl ?? null,
     },
     about: {
+      imageUrl: s.about?.imageUrl ?? null,
       summary: s.about?.summary ?? null,
       introduction: s.about?.introduction ?? null,
       mission: s.about?.mission ?? null,
@@ -139,6 +141,7 @@ adminSettingsRouter.patch(
     const input: UpdateSiteSettingsInput = parse(updateSiteSettingsSchema, req.body);
     await assertPublicAssetUrl(input.logoUrl, 'logoUrl');
     await assertPublicAssetUrl(input.hero?.imageUrl, 'hero.imageUrl');
+    await assertPublicAssetUrl(input.about?.imageUrl, 'about.imageUrl');
     const set = flatten(input as Record<string, unknown>);
     await getOrCreate();
     await SiteSettings.updateOne({ key: 'site' }, { $set: { ...set, updatedBy: auth.userId } });

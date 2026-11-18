@@ -500,7 +500,7 @@ export function AdminRolesPage() {
                 type="button"
                 onClick={() => setActive(r.id)}
                 aria-current={current?.id === r.id}
-                className={`w-full rounded-md border px-3.5 py-2.5 text-left text-sm transition-colors ${current?.id === r.id ? 'border-primary bg-primary text-white' : 'border-border bg-background hover:bg-mint'}`}
+                className={`w-full rounded-md border px-3.5 py-2.5 text-left text-sm transition-colors ${current?.id === r.id ? 'border-brand bg-brand text-brand-foreground' : 'border-border bg-background hover:bg-mint'}`}
               >
                 <span className="block font-semibold">{r.name}</span>
                 <span
@@ -753,6 +753,7 @@ interface SettingsForm {
   heroTitle: string;
   heroSubtitle: string;
   heroImageUrl: string;
+  aboutImageUrl: string;
   aboutSummary: string;
   aboutIntroduction: string;
   aboutMission: string;
@@ -799,6 +800,7 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
       heroTitle: initial.hero.title ?? '',
       heroSubtitle: initial.hero.subtitle ?? '',
       heroImageUrl: initial.hero.imageUrl ?? '',
+      aboutImageUrl: initial.about.imageUrl ?? '',
       aboutSummary: initial.about.summary ?? '',
       aboutIntroduction: initial.about.introduction ?? '',
       aboutMission: initial.about.mission ?? '',
@@ -827,6 +829,7 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
         },
         hero: { title: n(v.heroTitle), subtitle: n(v.heroSubtitle), imageUrl: n(v.heroImageUrl) },
         about: {
+          imageUrl: n(v.aboutImageUrl),
           summary: n(v.aboutSummary),
           introduction: n(v.aboutIntroduction),
           mission: n(v.aboutMission),
@@ -913,9 +916,22 @@ function SettingsEditor({ initial }: { initial: PublicSiteSettings }) {
         </section>
         <section className="grid gap-5 rounded-lg border border-border bg-background p-6 md:grid-cols-2">
           <h2 className="text-lg md:col-span-2">About page</h2>
-          <FormField label="Introduction" className="md:col-span-2">
-            <Textarea rows={4} {...form.register('aboutIntroduction')} />
+          <FormField label="Introduction">
+            <Textarea rows={8} {...form.register('aboutIntroduction')} />
           </FormField>
+          <Controller
+            control={form.control}
+            name="aboutImageUrl"
+            render={({ field }) => (
+              <ImageUploader
+                label="About page photograph"
+                purpose="site_asset"
+                aspect="4/5"
+                value={field.value || null}
+                onChange={(u) => field.onChange(u ?? '')}
+              />
+            )}
+          />
           <FormField label="Mission">
             <Textarea rows={3} {...form.register('aboutMission')} />
           </FormField>

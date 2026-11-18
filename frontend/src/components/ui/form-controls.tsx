@@ -31,8 +31,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
       ref={ref}
       className={cn(
         fieldBase,
-        'h-11 appearance-none bg-[length:12px] bg-[right_0.9rem_center] bg-no-repeat pr-9',
-        "bg-[url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2368756F' stroke-width='1.6' d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E\")]",
+        // Chevron lives in a CSS class (styles/index.css): an inline data-URL class contained spaces, which
+        // broke it into fragments that tailwind-merge read as a colour and used to drop `bg-background`.
+        'select-chevron h-11 appearance-none pr-9',
         className,
       )}
       {...props}

@@ -1,9 +1,6 @@
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import {
   changePasswordSchema,
   updateProfileSchema,
@@ -20,6 +17,7 @@ import { AlertMessage, Badge } from '@/components/ui/feedback';
 import { Input, Select } from '@/components/ui/form-controls';
 import { applyServerErrors } from '@/features/auth/AuthCard';
 import { useAuth } from '@/features/auth/AuthProvider';
+import { MyLearning } from '@/features/courses/MyLearning';
 import { apiPatch } from '@/lib/api';
 import { formatDate } from '@/lib/format';
 import { usePageMeta } from '@/lib/seo';
@@ -35,20 +33,7 @@ export function StudentDashboardPage() {
     <>
       <DashboardPageHeader title={t('dashboard.welcome', { name: user.fullName.split(' ')[0] })} />
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
-        <section className="rounded-lg border border-border bg-background p-6 sm:p-8">
-          <span className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-mint text-primary">
-            <FontAwesomeIcon icon={faHourglassHalf} aria-hidden />
-          </span>
-          <h2 className="text-xl">{t('dashboard.upcomingModules')}</h2>
-          <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted-foreground">
-            {t('dashboard.upcomingBody')}
-          </p>
-          <Button asChild className="mt-6">
-            <Link to="/courses">
-              <FontAwesomeIcon icon={faBookOpen} aria-hidden /> {t('dashboard.browseCourses')}
-            </Link>
-          </Button>
-        </section>
+        <MyLearning />
         <section className="rounded-lg border border-border bg-background p-6">
           <h2 className="text-lg">{t('dashboard.accountTitle')}</h2>
           <dl className="mt-4 space-y-4 text-sm">

@@ -5,11 +5,13 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { EmptyState, ErrorState, SectionHeading } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/feedback';
-import { useAuth, dashboardPathFor } from '@/features/auth/AuthProvider';
+import { useAuth } from '@/features/auth/AuthProvider';
 import { CourseCard } from '@/features/courses/CourseCard';
 import { FALLBACK_SETTINGS, useCourses, useInstructors, usePrograms, useSiteSettings } from '@/lib/queries';
 import { InstructorCard, ProgramCard } from '@/features/public/cards';
 import { usePageMeta } from '@/lib/seo';
+import { HomeHero } from './HomeHero';
+import { HomeWebinars } from './HomeWebinars';
 
 export function CourseGridSkeleton({ count = 3 }: { count?: number }) {
   return (
@@ -40,48 +42,7 @@ export function HomePage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ivory">
-        <div className="container grid items-center gap-10 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-28">
-          <div className="max-w-2xl">
-            <p className="eyebrow mb-5">{t('home.eyebrow')}</p>
-            <h1>{s.hero.title ?? t('home.heroTitle')}</h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {s.hero.subtitle ?? t('home.heroSubtitle')}
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" asChild>
-                <Link to="/courses">
-                  {t('home.exploreCourses')} <FontAwesomeIcon icon={faArrowRight} aria-hidden />
-                </Link>
-              </Button>
-              {user ? (
-                <Button size="lg" variant="secondary" asChild>
-                  <Link to={dashboardPathFor(user)}>{t('nav.dashboard')}</Link>
-                </Button>
-              ) : (
-                <Button size="lg" variant="secondary" asChild>
-                  <Link to="/register">{t('home.createAccount')}</Link>
-                </Button>
-              )}
-            </div>
-          </div>
-          {s.hero.imageUrl ? (
-            <img
-              src={s.hero.imageUrl}
-              alt=""
-              className="aspect-[4/5] w-full rounded-lg object-cover shadow-card lg:aspect-[4/5]"
-            />
-          ) : (
-            // Decorative brand composition until a real academy photograph is configured in Site Settings.
-            <div aria-hidden className="relative hidden aspect-[4/5] lg:block">
-              <div className="absolute inset-0 rounded-lg bg-primary" />
-              <div className="absolute -bottom-6 -left-6 h-40 w-40 rounded-lg bg-accent/90" />
-              <div className="absolute inset-x-10 top-10 border-t border-white/20" />
-            </div>
-          )}
-        </div>
-      </section>
+      <HomeHero />
 
       {/* Featured courses */}
       <section className="container py-16 sm:py-24">
@@ -111,6 +72,8 @@ export function HomePage() {
           </div>
         )}
       </section>
+
+      <HomeWebinars />
 
       {/* Academic programs — rendered only when published programs exist */}
       {programs.data && programs.data.data.length > 0 && (

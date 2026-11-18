@@ -18,6 +18,12 @@ import { adminUsersRouter, meRouter } from './modules/users/users.routes.js';
 import { mediaRouter } from './modules/media/media.routes.js';
 import { adminProgramsRouter, publicProgramsRouter } from './modules/programs/programs.js';
 import {
+  adminLearningPathsRouter,
+  publicLearningPathsRouter,
+} from './modules/learning-paths/learning-paths.js';
+import { adminWebinarsRouter, publicWebinarsRouter } from './modules/webinars/webinars.js';
+import { adminApplicationsRouter, studentAdmissionsRouter } from './modules/admissions/admissions.js';
+import {
   adminInstructorsRouter,
   instructorProfileRouter,
   publicInstructorsRouter,
@@ -82,6 +88,12 @@ export function createApp(): Express {
   v1.use('/', publicCurriculumRouter);
   v1.use('/', publicContactRouter);
   v1.use('/admin/programs', adminProgramsRouter);
+  v1.use('/', publicLearningPathsRouter);
+  v1.use('/admin/learning-paths', adminLearningPathsRouter);
+  v1.use('/', publicWebinarsRouter);
+  v1.use('/admin/webinars', adminWebinarsRouter);
+  v1.use('/', studentAdmissionsRouter);
+  v1.use('/admin/applications', adminApplicationsRouter);
   v1.use('/admin/instructors', adminInstructorsRouter);
   v1.use('/admin/contact-messages', adminContactRouter);
   v1.use('/curriculum', curriculumRouter);

@@ -8,6 +8,9 @@ import {
   faEnvelope,
   faIdBadge,
   faLayerGroup,
+  faRoute,
+  faFileSignature,
+  faMicrophoneLines,
   faBookOpen,
   faClipboardList,
   faGaugeHigh,
@@ -23,6 +26,7 @@ import { Brand } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { Drawer } from '@/components/ui/dialog';
 import { useAuth } from '@/features/auth/AuthProvider';
+import { ThemeToggle } from '@/features/theme/ThemeToggle';
 import { FALLBACK_SETTINGS, useSiteSettings } from '@/lib/queries';
 import { cn } from '@/lib/utils';
 import { LanguageSwitcher, UserMenu } from './PublicLayout';
@@ -73,6 +77,30 @@ const NAV_GROUPS: NavGroup[] = [
         any: ['categories.manage', 'courses.update'],
       },
       { to: '/admin/programs', labelKey: 'nav.programs', icon: faLayerGroup, any: ['programs.manage'] },
+      {
+        to: '/admin/learning-paths',
+        labelKey: 'nav.roadmaps',
+        icon: faRoute,
+        any: ['learning_paths.manage'],
+      },
+      {
+        to: '/admin/webinars',
+        labelKey: 'nav.webinars',
+        icon: faMicrophoneLines,
+        any: [
+          'webinars.create',
+          'webinars.update',
+          'webinars.publish',
+          'webinars.cancel',
+          'webinar_registrations.manage',
+        ],
+      },
+      {
+        to: '/admin/applications',
+        labelKey: 'nav.applications',
+        icon: faFileSignature,
+        any: ['applications.read'],
+      },
       {
         to: '/admin/instructors',
         labelKey: 'nav.instructors',
@@ -128,7 +156,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                     cn(
                       'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition-colors',
                       isActive
-                        ? 'bg-primary text-white'
+                        ? 'bg-brand text-brand-foreground'
                         : 'text-foreground/80 hover:bg-mint hover:text-primary',
                     )
                   }
@@ -179,6 +207,7 @@ export function DashboardLayout() {
             </Link>
           </div>
           <div className="flex items-center gap-1">
+            <ThemeToggle />
             <LanguageSwitcher />
             <UserMenu />
           </div>

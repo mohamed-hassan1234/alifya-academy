@@ -77,6 +77,7 @@ export const updateSiteSettingsSchema = z.object({
     .optional(),
   about: z
     .object({
+      imageUrl: assetUrlSchema.nullable().optional(),
       summary: z.string().trim().max(1500).nullable().optional(),
       introduction: z.string().trim().max(5000).nullable().optional(),
       mission: z.string().trim().max(1500).nullable().optional(),

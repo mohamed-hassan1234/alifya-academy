@@ -55,6 +55,16 @@ permissions. It consists of:
 The backend is authoritative: permissions, statuses and validation are enforced server-side; the frontend only
 mirrors them for a better experience.
 
+### Brand and design system
+
+- **Logo:** the official logo lives in `frontend/public/logo.png`; favicons and app icons are derived from it.
+- **Colours** (`packages/design-tokens/src/tokens.css`): deep green `#17332C` for identity and primary
+  actions, warm peach `#DCA477` as a restrained accent, white and soft ivory surfaces. Every colour is a CSS
+  variable with a light and a dark value, so components never hard-code colours.
+- **Typography:** Plus Jakarta Sans for headings, Inter for body text.
+- **Shape:** 8 / 12 / 16 / 24 px radius scale, subtle borders, minimal shadows, short (≤ 250 ms) motion that
+  is disabled for users who prefer reduced motion.
+
 ## 2. Features
 
 Discovered in the codebase (see `docs/` for details and test coverage):
@@ -69,7 +79,7 @@ Discovered in the codebase (see `docs/` for details and test coverage):
 
 **Roles & permissions (RBAC)**
 
-- 54 permissions and 7 system roles: student, instructor, admissions officer, finance officer, content manager,
+- 55 permissions and 7 system roles: student, instructor, admissions officer, finance officer, content manager,
   academy admin, super admin
 - Administrators can tune role permissions and create custom roles; changes take effect immediately
 
@@ -79,12 +89,38 @@ Discovered in the codebase (see `docs/` for details and test coverage):
 - Curriculum: sections and ordered text / video / PDF lessons, resources, free-preview lessons
 - Programs, instructor profiles (public directory + self-service), contact form with admin inbox
 
+**Learning roadmaps (signature feature)**
+
+- Guided learning journeys drawn as an interactive **winding road** (SVG): numbered milestones, stage
+  cards, start/finish landmarks and a detail drawer per stage (objectives, prerequisites, courses)
+- Built from real data: each stage groups existing courses; only published roadmaps and published courses
+  are shown publicly. Managed in Admin → Roadmaps (`learning_paths.manage`), with draft/publish/archive
+- Keyboard and screen-reader accessible (every stage is a button in an ordered list, state is announced),
+  responsive without horizontal scrolling, and the road animation respects reduced-motion settings
+
+**Webinars**
+
+- Public `/webinars` page with a featured banner in the official poster style, Upcoming / Past tabs, search
+  and topic filters; detail pages with poster, speakers, agenda, date and time in the event's time zone
+- Free registration for signed-in users: one registration per person (enforced by a unique index),
+  optional capacity with atomic seat counting, self-cancellation, and statuses Registration open / Closed /
+  Live / Completed / Cancelled
+- **Meeting links stay private:** never in public responses; a registered participant sees the link and
+  passcode only from N minutes before the start until the end (recordings after the end)
+- Admin → Webinars: create and edit (poster and speaker photo uploads), publish, cancel, view registrations
+  and record attendance — each action guarded by its own permission (`webinars.create`, `webinars.update`,
+  `webinars.publish`, `webinars.cancel`, `webinar_registrations.manage`)
+- No Zoom API integration: staff paste the meeting link. Paid webinars are not supported yet (they will
+  reuse the course payment flow once it exists)
+
 **Media**
 
 - Content-sniffed uploads (type decided by file bytes, not the extension), per-purpose size/type rules,
   public vs. private storage with short-lived signed links
 
 **Web app**
+
+- Light / Dark / System colour themes (remembered per browser, applied before first paint)
 
 - Public site: home, courses, course detail, programs, instructors, about, contact
 - Dashboards for students, instructors and administrators; site settings CMS (name, logo, hero, about, contact, social)
@@ -138,7 +174,7 @@ alifya-academy/
 │   ├── public/                  logo.png (official logo), favicon.ico, app icons, site.webmanifest
 │   ├── src/
 │   │   ├── components/          Layouts, shared components (Brand/LogoMark), UI primitives
-│   │   ├── features/            Auth provider, route guards, course widgets
+│   │   ├── features/            Auth, route guards, course widgets, roadmap (winding road), theme
 │   │   ├── pages/               Public, student, instructor and admin pages
 │   │   ├── routes/ · lib/ · i18n/ · styles/
 │   ├── .env.example             Frontend (dev server) configuration template
@@ -317,7 +353,7 @@ users or statistics:
 
 | Collection     | What is seeded                                                                                            |
 | -------------- | --------------------------------------------------------------------------------------------------------- |
-| `permissions`  | The 54-entry permission catalogue (from `packages/shared/src/permissions.ts`)                             |
+| `permissions`  | The 55-entry permission catalogue (from `packages/shared/src/permissions.ts`)                             |
 | `roles`        | The 7 system roles with their default permissions; `super_admin` always holds every permission            |
 | `sitesettings` | The site-settings singleton with its defaults (academy name, timezone, currency, languages)               |
 | `users`        | Only if `SEED_SUPERADMIN_EMAIL` **and** `SEED_SUPERADMIN_PASSWORD` are set: the first Super Administrator |

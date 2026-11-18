@@ -73,6 +73,11 @@ export function useAuth(): AuthContextValue {
 export const ADMIN_AREA_PERMISSIONS: Permission[] = [
   'courses.read',
   'programs.manage',
+  'learning_paths.manage',
+  'webinars.create',
+  'webinars.update',
+  'webinar_registrations.manage',
+  'applications.read',
   'instructors.read',
   'users.read',
   'permissions.manage',

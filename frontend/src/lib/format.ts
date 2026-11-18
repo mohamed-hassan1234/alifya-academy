@@ -88,3 +88,39 @@ export function toDateInputValue(iso: string | null | undefined, timeZone = DEFA
     day: '2-digit',
   }).format(new Date(iso));
 }
+
+/** "Wednesday, 4 Nov 2026" in the event's own time zone. */
+export function formatEventDate(iso: string, lang = 'en', timeZone = DEFAULT_TIMEZONE): string {
+  return new Intl.DateTimeFormat(localeFor(lang), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone,
+  }).format(new Date(iso));
+}
+
+/** "08:00 – 10:00 EAT" in the event's own time zone. */
+export function formatEventTimeRange(
+  startIso: string,
+  endIso: string,
+  lang = 'en',
+  timeZone = DEFAULT_TIMEZONE,
+) {
+  const t = (iso: string, zone: boolean) =>
+    new Intl.DateTimeFormat(localeFor(lang), {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone,
+      ...(zone ? { timeZoneName: 'short' } : {}),
+    }).format(new Date(iso));
+  return `${t(startIso, false)} – ${t(endIso, true)}`;
+}
+
+/** Converts an ISO instant to the value a <input type="datetime-local"> expects, in the device's time zone. */
+export function toDateTimeLocal(iso: string | null | undefined): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}

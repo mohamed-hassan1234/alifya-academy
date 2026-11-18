@@ -25,6 +25,23 @@ const ProgramDetailPage = named(info, 'ProgramDetailPage');
 const InstructorsPage = named(info, 'InstructorsPage');
 const InstructorDetailPage = named(info, 'InstructorDetailPage');
 const ContactPage = named(info, 'ContactPage');
+const AdminApplicationsPage = named(
+  () => import('@/pages/admin/ApplicationAdminPages'),
+  'AdminApplicationsPage',
+);
+const webinarPages = () => import('@/pages/public/WebinarPages');
+const WebinarsPage = named(webinarPages, 'WebinarsPage');
+const WebinarDetailPage = named(webinarPages, 'WebinarDetailPage');
+const webinarAdmin = () => import('@/pages/admin/WebinarAdminPages');
+const AdminWebinarsPage = named(webinarAdmin, 'AdminWebinarsPage');
+const AdminWebinarFormPage = named(webinarAdmin, 'AdminWebinarFormPage');
+const AdminWebinarRegistrationsPage = named(webinarAdmin, 'AdminWebinarRegistrationsPage');
+const roadmap = () => import('@/pages/public/RoadmapPages');
+const RoadmapsPage = named(roadmap, 'RoadmapsPage');
+const RoadmapDetailPage = named(roadmap, 'RoadmapDetailPage');
+const pathsAdmin = () => import('@/pages/admin/LearningPathAdminPages');
+const AdminLearningPathsPage = named(pathsAdmin, 'AdminLearningPathsPage');
+const AdminLearningPathFormPage = named(pathsAdmin, 'AdminLearningPathFormPage');
 const academic = () => import('@/pages/admin/AcademicAdminPages');
 const AdminProgramsPage = named(academic, 'AdminProgramsPage');
 const AdminProgramFormPage = named(academic, 'AdminProgramFormPage');
@@ -73,6 +90,10 @@ export function AppRoutes() {
           <Route path="courses" element={<CoursesPage />} />
           <Route path="courses/:slug" element={<CourseDetailPage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="webinars" element={<WebinarsPage />} />
+          <Route path="webinars/:slug" element={<WebinarDetailPage />} />
+          <Route path="roadmaps" element={<RoadmapsPage />} />
+          <Route path="roadmaps/:slug" element={<RoadmapDetailPage />} />
           <Route path="programs" element={<ProgramsPage />} />
           <Route path="programs/:slug" element={<ProgramDetailPage />} />
           <Route path="instructors" element={<InstructorsPage />} />
@@ -160,6 +181,86 @@ export function AppRoutes() {
                 element={
                   <PermissionGuard all={['programs.manage']}>
                     <AdminProgramFormPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="applications"
+                element={
+                  <PermissionGuard all={['applications.read']}>
+                    <AdminApplicationsPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="webinars"
+                element={
+                  <PermissionGuard
+                    any={[
+                      'webinars.create',
+                      'webinars.update',
+                      'webinars.publish',
+                      'webinars.cancel',
+                      'webinar_registrations.manage',
+                    ]}
+                  >
+                    <AdminWebinarsPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="webinars/new"
+                element={
+                  <PermissionGuard all={['webinars.create']}>
+                    <AdminWebinarFormPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="webinars/:id"
+                element={
+                  <PermissionGuard
+                    any={[
+                      'webinars.create',
+                      'webinars.update',
+                      'webinars.publish',
+                      'webinars.cancel',
+                      'webinar_registrations.manage',
+                    ]}
+                  >
+                    <AdminWebinarFormPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="webinars/:id/registrations"
+                element={
+                  <PermissionGuard all={['webinar_registrations.manage']}>
+                    <AdminWebinarRegistrationsPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="learning-paths"
+                element={
+                  <PermissionGuard all={['learning_paths.manage']}>
+                    <AdminLearningPathsPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="learning-paths/new"
+                element={
+                  <PermissionGuard all={['learning_paths.manage']}>
+                    <AdminLearningPathFormPage />
+                  </PermissionGuard>
+                }
+              />
+              <Route
+                path="learning-paths/:id"
+                element={
+                  <PermissionGuard all={['learning_paths.manage']}>
+                    <AdminLearningPathFormPage />
                   </PermissionGuard>
                 }
               />

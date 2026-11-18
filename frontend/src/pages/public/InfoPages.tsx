@@ -88,60 +88,73 @@ export function AboutPage() {
         description={a.summary ?? undefined}
       />
       <div className="container py-12 sm:py-16">
-        {isPending ? (
-          <Skeleton className="h-60 w-full" />
-        ) : !hasContent ? (
-          // No invented institutional claims: show an honest state until the Academy supplies its content.
-          <EmptyState title={t('about.pending')} />
-        ) : (
-          <div className="grid gap-12">
-            {a.introduction && (
-              <p className="max-w-prose whitespace-pre-line text-lg leading-relaxed text-foreground/90">
-                {a.introduction}
-              </p>
-            )}
-            {(a.mission || a.vision) && (
-              <div className="grid gap-6 md:grid-cols-2">
-                {a.mission && (
-                  <section className="rounded-lg border border-border bg-ivory p-6 sm:p-8">
-                    <p className="eyebrow mb-3">{t('about.mission')}</p>
-                    <p className="whitespace-pre-line font-display text-2xl leading-snug text-primary">
-                      {a.mission}
-                    </p>
-                  </section>
-                )}
-                {a.vision && (
-                  <section className="rounded-lg border border-border bg-primary p-6 text-white sm:p-8">
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
-                      {t('about.vision')}
-                    </p>
-                    <p className="whitespace-pre-line font-display text-2xl leading-snug">{a.vision}</p>
-                  </section>
-                )}
-              </div>
-            )}
-            {a.values.length > 0 && (
-              <section>
-                <h2 className="mb-6">{t('about.values')}</h2>
-                <CheckList items={a.values} />
-              </section>
-            )}
-            {a.objectives.length > 0 && (
-              <section>
-                <h2 className="mb-6">{t('about.objectives')}</h2>
-                <CheckList items={a.objectives} />
-              </section>
-            )}
-            {a.approach && (
-              <section>
-                <h2 className="mb-4">{t('about.approach')}</h2>
-                <p className="max-w-prose whitespace-pre-line leading-relaxed text-foreground/90">
-                  {a.approach}
+        <div
+          className={
+            a.imageUrl ? 'grid items-start gap-10 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-14' : undefined
+          }
+        >
+          {a.imageUrl && (
+            <img
+              src={a.imageUrl}
+              alt=""
+              className="mx-auto aspect-[4/5] w-full max-w-sm rounded-lg object-cover shadow-card lg:sticky lg:top-24"
+            />
+          )}
+          {isPending ? (
+            <Skeleton className="h-60 w-full" />
+          ) : !hasContent ? (
+            // No invented institutional claims: show an honest state until the Academy supplies its content.
+            <EmptyState title={t('about.pending')} />
+          ) : (
+            <div className="grid gap-12">
+              {a.introduction && (
+                <p className="max-w-prose whitespace-pre-line text-lg leading-relaxed text-foreground/90">
+                  {a.introduction}
                 </p>
-              </section>
-            )}
-          </div>
-        )}
+              )}
+              {(a.mission || a.vision) && (
+                <div className="grid gap-6 md:grid-cols-2">
+                  {a.mission && (
+                    <section className="rounded-lg border border-border bg-ivory p-6 sm:p-8">
+                      <p className="eyebrow mb-3">{t('about.mission')}</p>
+                      <p className="whitespace-pre-line font-display text-2xl leading-snug text-primary">
+                        {a.mission}
+                      </p>
+                    </section>
+                  )}
+                  {a.vision && (
+                    <section className="rounded-lg border border-border bg-brand p-6 text-white sm:p-8">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+                        {t('about.vision')}
+                      </p>
+                      <p className="whitespace-pre-line font-display text-2xl leading-snug">{a.vision}</p>
+                    </section>
+                  )}
+                </div>
+              )}
+              {a.values.length > 0 && (
+                <section>
+                  <h2 className="mb-6">{t('about.values')}</h2>
+                  <CheckList items={a.values} />
+                </section>
+              )}
+              {a.objectives.length > 0 && (
+                <section>
+                  <h2 className="mb-6">{t('about.objectives')}</h2>
+                  <CheckList items={a.objectives} />
+                </section>
+              )}
+              {a.approach && (
+                <section>
+                  <h2 className="mb-4">{t('about.approach')}</h2>
+                  <p className="max-w-prose whitespace-pre-line leading-relaxed text-foreground/90">
+                    {a.approach}
+                  </p>
+                </section>
+              )}
+            </div>
+          )}
+        </div>
         {instructors.data && instructors.data.data.length > 0 && (
           <section className="mt-16">
             <SectionHeading

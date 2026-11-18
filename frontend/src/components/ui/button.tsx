@@ -10,11 +10,13 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-white hover:bg-primary-hover',
-        accent: 'bg-accent text-primary hover:bg-accent/85',
+        // Hover/active use the brand's Warm Peach (#DCA477) with deep-green text.
+        primary:
+          'bg-brand text-brand-foreground hover:bg-accent hover:text-[rgb(23_51_44)] active:bg-accent/90',
+        accent: 'bg-accent text-[rgb(23_51_44)] hover:bg-accent/80',
         secondary:
-          'border border-primary/20 bg-background text-primary hover:border-primary/40 hover:bg-mint',
-        ghost: 'text-primary hover:bg-mint',
+          'border border-primary/20 bg-background text-primary hover:border-accent hover:bg-accent hover:text-[rgb(23_51_44)]',
+        ghost: 'text-primary hover:bg-accent/20 hover:text-primary',
         danger: 'bg-danger text-white hover:bg-danger/90',
         link: 'h-auto px-0 text-primary underline-offset-4 hover:underline',
       },

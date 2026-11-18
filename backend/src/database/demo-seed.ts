@@ -114,6 +114,23 @@ const SCREENS: { path: string; label: string; any?: Permission[]; role?: SystemR
   { path: '/admin/courses', label: 'Courses (admin)', any: ['courses.read'] },
   { path: '/admin/categories', label: 'Categories', any: ['categories.manage', 'courses.update'] },
   { path: '/admin/programs', label: 'Programs', any: ['programs.manage'] },
+  { path: '/admin/learning-paths', label: 'Learning roadmaps', any: ['learning_paths.manage'] },
+  {
+    path: '/admin/webinars',
+    label: 'Webinars (manage, registrations)',
+    any: [
+      'webinars.create',
+      'webinars.update',
+      'webinars.publish',
+      'webinars.cancel',
+      'webinar_registrations.manage',
+    ],
+  },
+  {
+    path: '/admin/applications',
+    label: 'Course applications (review, approve, reject)',
+    any: ['applications.read'],
+  },
   {
     path: '/admin/instructors',
     label: 'Instructors',
@@ -133,6 +150,11 @@ const ADMIN_AREA: Permission[] = [
   'users.read',
   'permissions.manage',
   'audit_logs.read',
+  'learning_paths.manage',
+  'webinars.create',
+  'webinars.update',
+  'webinar_registrations.manage',
+  'applications.read',
 ];
 
 function landingPage(role: SystemRoleKey, perms: Permission[]): string {

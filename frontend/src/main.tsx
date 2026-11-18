@@ -8,6 +8,7 @@ import './i18n';
 import './styles/index.css';
 import { ToastProvider } from '@/components/shared/toast';
 import { AuthProvider } from '@/features/auth/AuthProvider';
+import { ThemeProvider } from '@/features/theme/ThemeProvider';
 import { normalizeError } from '@/lib/api';
 import { AppRoutes } from '@/routes/AppRoutes';
 
@@ -72,15 +73,17 @@ container.__alfRoot ??= createRoot(container);
 container.__alfRoot.render(
   <StrictMode>
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <ToastProvider>
-            <AuthProvider>
-              <AppRoutes />
-            </AuthProvider>
-          </ToastProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <ToastProvider>
+              <AuthProvider>
+                <AppRoutes />
+              </AuthProvider>
+            </ToastProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   </StrictMode>,
 );

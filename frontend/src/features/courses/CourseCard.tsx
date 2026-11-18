@@ -11,7 +11,7 @@ export function CourseCard({ course }: { course: PublicCourseDto }) {
   const { t, i18n } = useTranslation();
   const instructor = course.instructors[0]?.fullName;
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background transition-shadow duration-200 hover:shadow-card">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-lift">
       <div className="relative aspect-[16/10] overflow-hidden bg-mint">
         {course.thumbnailUrl ? (
           <img
@@ -21,7 +21,7 @@ export function CourseCard({ course }: { course: PublicCourseDto }) {
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
           />
         ) : (
-          <div className="flex h-full items-end bg-gradient-to-br from-primary to-primary-hover p-5">
+          <div className="flex h-full items-end bg-gradient-to-br from-brand to-brand-hover p-5">
             <span className="font-display text-xl leading-tight text-white/90">{course.title}</span>
           </div>
         )}

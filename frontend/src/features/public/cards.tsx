@@ -20,7 +20,7 @@ export function InitialsAvatar({
     .join('')
     .toUpperCase();
   return (
-    <div className={`grid place-items-center bg-primary font-display text-white/90 ${className}`} aria-hidden>
+    <div className={`grid place-items-center bg-brand font-display text-white/90 ${className}`} aria-hidden>
       {initials}
     </div>
   );
@@ -73,7 +73,7 @@ export function ProgramCard({ program }: { program: PublicProgramDto }) {
         {program.imageUrl ? (
           <img src={program.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
         ) : (
-          <div className="grid h-full min-h-32 place-items-center bg-primary text-white/80">
+          <div className="grid h-full min-h-32 place-items-center bg-brand text-white/80">
             <FontAwesomeIcon icon={faLayerGroup} className="text-2xl" aria-hidden />
           </div>
         )}
