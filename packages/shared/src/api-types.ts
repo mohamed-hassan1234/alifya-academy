@@ -1,3 +1,5 @@
+import type { ApplicationStatus, EnrollmentStatus } from './enums.js';
+import type { WebinarDisplayStatus, WebinarPlatform } from './validation/academic.js';
 import type {
   CourseDisplayStatus,
   CourseLevel,
@@ -188,6 +190,8 @@ export interface PublicSiteSettings {
   social: Partial<Record<'facebook' | 'instagram' | 'linkedin' | 'x' | 'youtube' | 'tiktok', string | null>>;
   hero: { title: string | null; subtitle: string | null; imageUrl: string | null };
   about: {
+    /** Photograph shown on the About page. */
+    imageUrl: string | null;
     summary: string | null;
     introduction: string | null;
     mission: string | null;
@@ -236,6 +240,158 @@ export interface AdminProgramDto extends PublicProgramDto {
   displayOrder: number;
   publishedAt: string | null;
   updatedAt: string;
+}
+
+/* ---------- Learning paths (roadmaps) ---------- */
+export interface LearningPathStageDto {
+  id: string;
+  title: string;
+  description: string;
+  objectives: string[];
+  durationText: string;
+  /** Publicly: PUBLISHED courses only. */
+  courses: ProgramCourseDto[];
+}
+
+export interface PublicLearningPathSummaryDto {
+  id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  durationText: string;
+  stageCount: number;
+  courseCount: number;
+}
+
+export interface PublicLearningPathDto extends PublicLearningPathSummaryDto {
+  description: string;
+  outcomes: string[];
+  stages: LearningPathStageDto[];
+}
+
+export interface AdminLearningPathStageDto extends LearningPathStageDto {
+  courseIds: string[];
+}
+
+export interface AdminLearningPathDto extends Omit<PublicLearningPathDto, 'stages'> {
+  stages: AdminLearningPathStageDto[];
+  publicationStatus: PublicationStatus;
+  displayOrder: number;
+  publishedAt: string | null;
+  updatedAt: string;
+}
+
+/* ---------- Course applications & enrolments ---------- */
+export interface ApplicationCourseDto {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnailUrl: string | null;
+  isFree: boolean;
+  feeAmount: number;
+  currency: Currency;
+}
+
+export interface MyApplicationDto {
+  id: string;
+  status: ApplicationStatus;
+  motivation: string;
+  submittedAt: string;
+  decidedAt: string | null;
+  decisionNote: string | null;
+}
+
+export interface MyEnrollmentDto {
+  id: string;
+  status: EnrollmentStatus;
+  enrolledAt: string;
+}
+
+/** Signed-in user's relationship with one course. */
+export interface MyCourseStatusDto {
+  application: MyApplicationDto | null;
+  enrollment: MyEnrollmentDto | null;
+  canApply: boolean;
+}
+
+export interface MyLearningDto {
+  applications: (MyApplicationDto & { course: ApplicationCourseDto })[];
+  enrollments: (MyEnrollmentDto & { course: ApplicationCourseDto })[];
+}
+
+export interface AdminApplicationDto extends MyApplicationDto {
+  course: ApplicationCourseDto;
+  student: { id: string; fullName: string; email: string };
+  decidedBy: { id: string; fullName: string } | null;
+}
+
+/* ---------- Webinars ---------- */
+export interface WebinarSpeakerDto {
+  name: string;
+  title: string;
+  organization: string;
+  bio: string;
+  photoUrl: string | null;
+}
+
+export interface PublicWebinarSummaryDto {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle: string;
+  summary: string;
+  topic: string;
+  posterUrl: string | null;
+  speakers: WebinarSpeakerDto[];
+  startsAt: string;
+  endsAt: string;
+  timezone: string;
+  platform: WebinarPlatform;
+  venue: string;
+  status: WebinarDisplayStatus;
+  capacity: number | null;
+  seatsLeft: number | null;
+  featured: boolean;
+}
+
+export interface PublicWebinarDto extends PublicWebinarSummaryDto {
+  description: string;
+  agenda: string[];
+  cancelReason: string | null;
+  related: PublicWebinarSummaryDto[];
+}
+
+/** The signed-in user's registration. Join details appear only while joining is allowed. */
+export interface MyWebinarRegistrationDto {
+  registered: boolean;
+  registeredAt: string | null;
+  canJoinNow: boolean;
+  joinOpensAt: string;
+  meetingUrl: string | null;
+  meetingPasscode: string | null;
+  recordingUrl: string | null;
+}
+
+export interface AdminWebinarDto extends Omit<PublicWebinarDto, 'related'> {
+  publicationStatus: PublicationStatus;
+  registrationOpen: boolean;
+  registeredCount: number;
+  meetingUrl: string | null;
+  meetingPasscode: string | null;
+  joinOpensMinutesBefore: number;
+  recordingUrl: string | null;
+  cancelledAt: string | null;
+  publishedAt: string | null;
+  updatedAt: string;
+}
+
+export interface WebinarRegistrationDto {
+  id: string;
+  user: { id: string; fullName: string; email: string };
+  status: 'registered' | 'cancelled';
+  registeredAt: string;
+  cancelledAt: string | null;
+  attendedAt: string | null;
 }
 
 /* ---------- Instructors ---------- */

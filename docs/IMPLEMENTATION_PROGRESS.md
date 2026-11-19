@@ -43,14 +43,14 @@ Programs/instructor cards; real-photo-first instructor display (initials only wh
 
 ### 8–9. Tests executed and results
 
-| Suite                                           | Result                                                                                                 |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `packages/shared` (unit)                        | 14/14 passed                                                                                           |
-| `apps/api` (integration, in-memory replica set) | 58/58 passed — new: media (7), curriculum (7), programs/instructors/contact (7), seeding migration (3) |
-| `apps/web` (component/unit)                     | 7/7 passed                                                                                             |
-| Typecheck                                       | clean                                                                                                  |
-| Lint                                            | 0 errors (8 dev-only fast-refresh warnings)                                                            |
-| Production build                                | passes                                                                                                 |
+| Suite                                          | Result                                                                                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `packages/shared` (unit)                       | 14/14 passed                                                                                           |
+| `backend` (integration, in-memory replica set) | 58/58 passed — new: media (7), curriculum (7), programs/instructors/contact (7), seeding migration (3) |
+| `frontend` (component/unit)                    | 7/7 passed                                                                                             |
+| Typecheck                                      | clean                                                                                                  |
+| Lint                                           | 0 errors (8 dev-only fast-refresh warnings)                                                            |
+| Production build                               | passes                                                                                                 |
 
 **Browser verification (local dev stack):** registered a new user through the UI → verified via the emailed link → admin granted the Instructor role → admin created a category and a course with a real image upload and assigned the instructor → published → instructor signed in, landed on the Teaching portal, built a section with a text preview lesson and a PDF lesson (real upload), published both → instructor published a profile with an uploaded photo → as a visitor: course outline shows both lessons, non-preview lesson locked, preview opens, PDF lesson not retrievable as preview (404), outline contains no lesson bodies → contact form validated and submitted → admin created and published a program through the UI → admin saw the contact message. Responsive sweep at 320 px: 10 public, 3 instructor and 10 admin screens with zero horizontal overflow. The instructor was shown "Access restricted" on `/admin/programs`.
 

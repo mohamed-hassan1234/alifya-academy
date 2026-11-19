@@ -45,3 +45,11 @@ export const SUPPORTED_LANGUAGES = ['en', 'so'] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
 export const DEFAULT_TIMEZONE = 'Africa/Mogadishu';
+
+/** Course application lifecycle (admissions). Payment status is tracked separately on the enrolment. */
+export const APPLICATION_STATUSES = ['submitted', 'approved', 'rejected', 'withdrawn'] as const;
+export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
+
+/** active = has access; pending_payment = admitted to a paid course, no access until payment is verified. */
+export const ENROLLMENT_STATUSES = ['active', 'pending_payment', 'cancelled'] as const;
+export type EnrollmentStatus = (typeof ENROLLMENT_STATUSES)[number];

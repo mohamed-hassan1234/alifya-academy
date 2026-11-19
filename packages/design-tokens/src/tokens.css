@@ -1,18 +1,58 @@
-/* Alifya Academy design tokens. RGB channels so Tailwind can apply opacity modifiers. */
+/*
+ * Alifya Academy design tokens. RGB channels so Tailwind can apply opacity modifiers.
+ *
+ * Two roles for the brand green:
+ *   --alf-primary  green used as TEXT / accents (headings, links, icons, focus rings). In dark mode it
+ *                  becomes a light sage so it stays readable on dark surfaces.
+ *   --alf-brand    deep green used as a SURFACE under white text (buttons, footer, active nav). It stays
+ *                  deep green in both themes.
+ */
 :root {
+  color-scheme: light;
   --alf-primary: 23 51 44; /* #17332C */
   --alf-primary-hover: 31 68 58;
+  --alf-brand: 23 51 44; /* #17332C */
+  --alf-brand-hover: 31 68 58;
+  --alf-on-brand: 255 255 255;
   --alf-accent: 220 164 119; /* #DCA477 */
   --alf-accent-strong: 168 108 62; /* darker peach for text on light surfaces (AA contrast) */
   --alf-background: 255 255 255; /* #FFFFFF */
   --alf-ivory: 250 248 245; /* #FAF8F5 */
   --alf-mint: 238 243 240; /* #EEF3F0 */
-  --alf-text: 32 43 39; /* #202B27 */
-  --alf-muted: 104 117 111; /* #68756F */
-  --alf-border: 229 234 230; /* #E5EAE6 */
+  --alf-text: 23 35 31; /* #17231F */
+  --alf-muted: 100 113 107; /* #64716B */
+  --alf-border: 232 236 233; /* #E8ECE9 */
+  --alf-border-strong: 216 223 218; /* #D8DFDA */
+  --alf-surface-hover: 246 247 245; /* #F6F7F5 */
   --alf-danger: 176 42 42;
   --alf-success: 30 110 72;
   --alf-warning: 150 98 10;
   --alf-info: 34 86 140;
-  --alf-radius: 0.5rem;
+  --alf-shadow: 23 51 44;
+  --alf-radius: 0.75rem; /* 12px — cards, inputs; sm 8 / lg 16 / xl 24 */
+}
+
+/* Dark theme: green-tinted neutrals derived from the logo background (#182D28). */
+:root.dark {
+  color-scheme: dark;
+  --alf-primary: 178 214 196; /* light sage */
+  --alf-primary-hover: 204 230 217;
+  --alf-brand: 30 72 61;
+  --alf-brand-hover: 38 88 74;
+  --alf-on-brand: 255 255 255;
+  --alf-accent: 220 164 119;
+  --alf-accent-strong: 232 186 148;
+  --alf-background: 13 24 21; /* #0D1815 */
+  --alf-ivory: 17 31 27;
+  --alf-mint: 26 44 39;
+  --alf-text: 228 236 232;
+  --alf-muted: 152 168 161;
+  --alf-border: 40 60 53;
+  --alf-border-strong: 56 80 71;
+  --alf-surface-hover: 22 38 34;
+  --alf-danger: 232 104 104;
+  --alf-success: 96 196 146;
+  --alf-warning: 232 176 80;
+  --alf-info: 122 172 232;
+  --alf-shadow: 0 0 0;
 }

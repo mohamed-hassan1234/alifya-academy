@@ -11,7 +11,7 @@ Browser (React SPA)  ──/api/v1 (same origin via reverse proxy / Vite proxy)�
 
 Both apps import `@alifya/shared`, so validation rules, permission keys, enum values and response types are defined once.
 
-## Backend (`apps/api`)
+## Backend (`backend`)
 
 - `src/config` — zod-validated environment (`env.ts`; production refuses console email or insecure cookies), pino logger with secret redaction.
 - `src/middleware` — `authenticate` (JWT + live session/status/role lookup per request), `requirePermission`, CSRF double-submit, rate limiters, central error handler.
@@ -33,7 +33,7 @@ Both apps import `@alifya/shared`, so validation rules, permission keys, enum va
 | Zod parsing of all input instead of mongoose `sanitizeFilter`               | `sanitizeFilter` also rewrites the server's own operator queries; strict schemas reject `{ $ne: … }` objects up front. |
 | Transactions for multi-document writes (role assignment + audit)            | Atomicity; requires a replica set.                                                                                     |
 
-## Frontend (`apps/web`)
+## Frontend (`frontend`)
 
 - `components/ui` — shadcn-style primitives (Radix + CVA + tailwind-merge). `components.json` lets `npx shadcn add` extend it.
 - `components/shared` — PageHeader, SectionHeading, EmptyState, ErrorState, StatusBadge, Pagination, FormField, DataTable, confirmation dialog, toasts.

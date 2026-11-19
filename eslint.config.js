@@ -16,11 +16,17 @@ export default tseslint.config(
     },
   },
   {
-    files: ['apps/api/**/*.ts', 'packages/**/*.ts', 'scripts/**/*.ts'],
+    files: ['**/*.mjs'],
+    extends: [js.configs.recommended],
+    languageOptions: { globals: globals.node },
+    rules: { 'no-console': ['warn', { allow: ['warn', 'error', 'info'] }] },
+  },
+  {
+    files: ['backend/**/*.ts', 'packages/**/*.ts', 'scripts/**/*.ts'],
     languageOptions: { globals: globals.node },
   },
   {
-    files: ['apps/web/**/*.{ts,tsx}'],
+    files: ['frontend/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
     plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },
     rules: {

@@ -8,7 +8,7 @@ Iteration 1 log. Current status: [`IMPLEMENTATION_PROGRESS.md`](IMPLEMENTATION_P
 
 | Area         | What exists                                                                                                                                                                                                                                                                                                                                                                            |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Monorepo     | npm workspaces: `apps/api`, `apps/web`, `packages/shared`, `packages/design-tokens`; strict TS; ESLint 9 + Prettier                                                                                                                                                                                                                                                                    |
+| Monorepo     | npm workspaces: `backend`, `frontend`, `packages/shared`, `packages/design-tokens`; strict TS; ESLint 9 + Prettier                                                                                                                                                                                                                                                                     |
 | API platform | Env validation, pino (secret redaction), Helmet, CORS allowlist, rate limits, 200 kB body limit, request IDs, consistent envelope, central errors, health/readiness                                                                                                                                                                                                                    |
 | Auth         | Register (no account enumeration), email verification (hashed single-use tokens, resend), login with lockout, refresh rotation + reuse detection, CSRF double-submit, logout, forgot/reset password, change password, profile update                                                                                                                                                   |
 | RBAC         | 38-permission catalogue, 7 system roles, DB-backed roles, per-request permission resolution, role CRUD, user role assignment with escalation guards (transactional + audited), status management                                                                                                                                                                                       |
@@ -20,8 +20,8 @@ Iteration 1 log. Current status: [`IMPLEMENTATION_PROGRESS.md`](IMPLEMENTATION_P
 ### Tests executed (all passing)
 
 - `packages/shared` — 14 unit tests: course status precedence, registration window/capacity, password policy, date validation, role permission validation, slugify.
-- `apps/api` — 34 integration tests (Supertest + in-memory MongoDB replica set): health; register→verify→login journey; enumeration resistance; lockout; suspended accounts; token tampering; cookie flags; CSRF; refresh rotation and reuse detection revoking the family and its access token; logout; reset/change password session revocation; RBAC per role; immediate effect of role changes and suspension; super-admin escalation guards; role catalogue validation; course lifecycle, slugs, instructor validation, archive lock, date/money validation; public filters, pagination, regex and `$ne` injection.
-- `apps/web` — 7 tests: money/timezone helpers (incl. regression for a date-time formatter crash found in manual testing), CourseCard rendering, FormField accessibility wiring.
+- `backend` — 34 integration tests (Supertest + in-memory MongoDB replica set): health; register→verify→login journey; enumeration resistance; lockout; suspended accounts; token tampering; cookie flags; CSRF; refresh rotation and reuse detection revoking the family and its access token; logout; reset/change password session revocation; RBAC per role; immediate effect of role changes and suspension; super-admin escalation guards; role catalogue validation; course lifecycle, slugs, instructor validation, archive lock, date/money validation; public filters, pagination, regex and `$ne` injection.
+- `frontend` — 7 tests: money/timezone helpers (incl. regression for a date-time formatter crash found in manual testing), CourseCard rendering, FormField accessibility wiring.
 
 ### Manual verification (browser, local dev stack)
 
@@ -31,7 +31,7 @@ Bugs found this way and fixed: audit-log page crash (invalid `Intl` option combi
 
 ### Known gaps / honest limitations
 
-- **Official logo not supplied** — `logoUrl` is configurable; the name renders as text meanwhile.
+- ~~Official logo not supplied~~ — resolved 2026-11-18: bundled at `frontend/public/logo.png`; `logoUrl` can override it.
 - **Somali translations are a draft** and need review by a native-speaking staff member.
 - Admin course form labels are English-only (not yet in the dictionaries).
 - No media uploads yet: thumbnails/hero images are URLs until the media module (S3-compatible, signed URLs) exists.

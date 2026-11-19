@@ -1,0 +1,3 @@
+# Runtime upload storage and test storage (relative to backend/). Anchored so src/integrations/storage/ stays tracked.
+/storage/
+/.test-storage/
